@@ -16,6 +16,11 @@ import InputBase from "@material-ui/core/InputBase";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import { useDispatch } from "react-redux";
+import {
+   loginBttnClicked,
+   useUserSelector,
+} from "../../features/authentication/authenticationSlice";
 
 const useStyles = makeStyles((theme) => ({
    root: {
@@ -40,6 +45,32 @@ export function Login() {
    const navigate = useNavigate();
    const { authFormState, authFormDispatch } = useAuthForm();
 
+   const dispatch = useDispatch();
+   const { authError } = useUserSelector();
+
+   const loginButtonHandler = () => {
+      authFormDispatch({
+         type: AuthFormActionType.SET_LOADING,
+      });
+      if (!authFormState.email) {
+         authFormDispatch({
+            type: AuthFormActionType.SET_ERROR_MESSAGE,
+            payload: "Please enter the email",
+         });
+      } else if (!authFormState.password) {
+         authFormDispatch({
+            type: AuthFormActionType.SET_ERROR_MESSAGE,
+            payload: "Please enter the password",
+         });
+      } else {
+         const user = { email: authFormState.email, password: authFormState.password };
+         dispatch(loginBttnClicked({ user, navigate, state }));
+      }
+      authFormDispatch({
+         type: AuthFormActionType.SET_LOADING,
+      });
+   };
+
    return (
       <Box display="flex" justifyContent="center" alignItems="center">
          <Paper className={classes.root} elevation={3}>
@@ -55,7 +86,7 @@ export function Login() {
                      <InputBase
                         placeholder="please enter registered email"
                         margin="dense"
-                        labelWidth={0}
+                        labelwidth={0}
                         type="text"
                         required={true}
                         onChange={(e) =>
@@ -79,7 +110,7 @@ export function Login() {
                         margin="dense"
                         type={authFormState.showPassword ? "text" : "password"}
                         required={true}
-                        labelWidth={0}
+                        labelwidth={0}
                         onChange={(e) =>
                            authFormDispatch({
                               type: AuthFormActionType.SET_PASSWORD,
@@ -109,13 +140,15 @@ export function Login() {
                      fullWidth={true}
                      color="primary"
                      variant="contained"
+                     onClick={loginButtonHandler}
+                     disable={authFormState.isLoading ? true : false}
                      disableElevation={true}>
                      {authFormState.isLoading && <CircularProgress color="secondary" size="1rem" />}
                      {authFormState.isLoading ? " Loading..." : "Login"}
                   </Button>
                </div>
                <Typography variant="body1" color="error" align="center">
-                  {authFormState.errorMessage}
+                  {authError || authFormState.errorMessage}
                </Typography>
                <Typography variant="h6">
                   Not a user yet? &nbsp;

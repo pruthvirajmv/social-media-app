@@ -14,6 +14,7 @@ import {
 } from "../../features/authentication/authenticationSlice";
 import { Typography } from "@material-ui/core";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
    root: {
@@ -38,7 +39,13 @@ export const Profile = () => {
    const { authStatus, user } = useUserSelector();
    const dispatch = useDispatch();
 
-   console.log(user, authStatus);
+   const navigate = useNavigate();
+
+   const logoutHandler = () => {
+      dispatch(logoutBttnClicked());
+      navigate("/");
+      localStorage.clear();
+   };
 
    return (
       <>
@@ -88,7 +95,7 @@ export const Profile = () => {
                         </Grid>
                      </Grid>
                      <Grid item>
-                        <IconButton size="medium" onClick={() => dispatch(logoutBttnClicked())}>
+                        <IconButton size="medium" onClick={logoutHandler}>
                            <ExitToAppIcon />
                         </IconButton>
                      </Grid>

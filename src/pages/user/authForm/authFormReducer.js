@@ -5,18 +5,23 @@ export const authFormReducer = (state, action) => {
       case AuthFormActionType.SET_FIRST_NAME:
          return {
             ...state,
-            name: action.payload,
+            firstName: action.payload,
          };
       case AuthFormActionType.SET_LAST_NAME:
          return {
             ...state,
-            name: action.payload,
+            lastName: action.payload,
+         };
+      case AuthFormActionType.SET_USER_NAME:
+         return {
+            ...state,
+            userName: action.payload,
          };
 
       case AuthFormActionType.SET_EMAIL:
          return {
             ...state,
-            mail: action.payload,
+            email: action.payload,
          };
 
       case AuthFormActionType.SET_PASSWORD:

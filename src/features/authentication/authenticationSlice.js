@@ -1,102 +1,80 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { backendAPI, checkAxiosError } from "../../utils";
+import { backendAPI, setupAuthHeader } from "../../utils";
 
 export const loadUser = createAsyncThunk("user/loadUser", async () => {
-   // try {
-   //     const response = await axios({
-   //        method: "GET",
-   //        url: `${backendAPI}/user`,
-   //     });
-   //     return response;
-   //  } catch (error) {
-   //     checkAxiosError(error);
-   //  }
-   const data = {
-      user: {
-         _id: "u1234",
-         bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-         profilePic:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR87H-ACcTkVZEN7n3Ymvup3pn_7GSPTFxYCw&usqp=CAU",
-
-         fullName: "guest",
-         userName: "@neoGrammer_21",
-         profilePicName: "G",
-         email: "neog@camp.com",
-         website: "google.com",
-         following: [{ name: "guest1" }],
-         followers: [{ name: "guest1" }, { name: "guest2" }],
-         bookmarks: [],
-      },
-   };
-
+   const { data } = await axios({
+      method: "GET",
+      url: `${backendAPI}/user/profile`,
+   });
    return data;
 });
 
 export const loginBttnClicked = createAsyncThunk(
    "user/loginBttnClicked",
-   async (email, password, navigate, state) => {
+   async ({ user, navigate, state }, { rejectWithValue }) => {
       try {
-         const response = await axios({
+         const { data } = await axios({
             method: "POST",
             url: `${backendAPI}/user/login`,
-            data: { email: email, password: password },
+            data: { email: user.email, password: user.password },
          });
+         setupAuthHeader(data.user.token);
+         localStorage?.setItem("loginSession", JSON.stringify({ token: data.user.token }));
          navigate(state?.from || "/");
-         return response.data;
+         return data;
       } catch (error) {
-         checkAxiosError(error);
+         console.log(error);
+
+         return rejectWithValue(error.response.data);
       }
    }
 );
 
-export const signUpBttnClicked = createAsyncThunk("user/signUpBttnClicked", async (user) => {
-   try {
-      const response = await axios({
-         method: "POST",
-         url: `${backendAPI}/user/signup`,
-         data: { user: user },
-      });
-      return response.data;
-   } catch (error) {
-      checkAxiosError(error);
+export const signUpBttnClicked = createAsyncThunk(
+   "user/signUpBttnClicked",
+   async ({ user, navigate }, { rejectWithValue }) => {
+      try {
+         const { data } = await axios({
+            method: "POST",
+            url: `${backendAPI}/user/signup`,
+            data: { addUser: user },
+         });
+         navigate("/login");
+         return data;
+      } catch (error) {
+         return rejectWithValue(error.response.data);
+      }
    }
-});
+);
 
 export const profileUpdateBttnClicked = createAsyncThunk(
    "user/profileUpdateBttnClicked",
    async (updateProfile) => {
-      try {
-         const response = await axios({
-            method: "POST",
-            url: `${backendAPI}/user/update`,
-            data: { user: updateProfile },
-         });
-         return response.data;
-      } catch (error) {
-         checkAxiosError(error);
-      }
+      const { data } = await axios({
+         method: "POST",
+         url: `${backendAPI}/user/update`,
+         data: { user: updateProfile },
+      });
+      return data;
    }
 );
 
 export const bookmarkBttnClicked = createAsyncThunk("posts/bookmarkBttnClicked", async (postId) => {
-   try {
-      const response = await axios({
-         method: "POST",
-         url: `${backendAPI}/togglebookmark`,
-         data: { postId: postId },
-      });
-      return response.data;
-   } catch (error) {
-      checkAxiosError(error);
-   }
+   const { data } = await axios({
+      method: "POST",
+      url: `${backendAPI}/user/bookmark`,
+      data: { postId: postId },
+   });
+   return data.bookmarks;
 });
 
 export const userSlice = createSlice({
    name: "user",
    initialState: {
       authStatus: "",
+      authError: "",
       user: {},
    },
    reducers: {
@@ -107,43 +85,63 @@ export const userSlice = createSlice({
       },
    },
    extraReducers: {
+      // -------- load user----------- //
       [loadUser.pending]: (state, action) => {
          state.authStatus = "loading";
       },
       [loadUser.fulfilled]: (state, action) => {
          state.authStatus = "loggedIn";
-         console.log(action.payload.user);
          state.user = action.payload.user;
       },
       [loadUser.rejected]: (state, action) => {
          state.authStatus = "loggedOut";
       },
+
+      // -------- login user----------- //
+
       [loginBttnClicked.fulfilled]: (state, action) => {
          state.authStatus = "loggedIn";
-         console.log(action.payload);
          state.user = action.payload.user;
+         state.authError = "";
       },
       [loginBttnClicked.rejected]: (state, action) => {
          state.authStatus = "error";
+         state.authError = action.payload.message;
       },
+
+      // -------- signup user----------- //
+
       [signUpBttnClicked.pending]: (state, action) => {
          state.authStatus = "loading";
       },
       [signUpBttnClicked.fulfilled]: (state, action) => {
          state.authStatus = "loggedIn";
-         console.log(action.payload);
-         state.user = action.payload.user;
+         state.authError = "";
       },
       [signUpBttnClicked.rejected]: (state, action) => {
          state.authStatus = "loggedOut";
+         state.authError = action.payload.message;
       },
+
+      // -------- user profile update----------- //
+
       [profileUpdateBttnClicked.fulfilled]: (state, action) => {
          state.authStatus = "loggedIn";
          console.log(action.payload);
          state.user = action.payload.user;
       },
+      [profileUpdateBttnClicked.rejected]: (state, action) => {
+         state.authStatus = "loggedIn";
+         console.log(action.error.errorMessage);
+      },
+
+      // -------- bookmark post----------- //
+
       [bookmarkBttnClicked.fulfilled]: (state, action) => {
-         state.user = action.payload.user;
+         state.user.bookmarks = action.payload;
+      },
+      [bookmarkBttnClicked.rejected]: (state, action) => {
+         console.log(action.error.message);
       },
    },
 });

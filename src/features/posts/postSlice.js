@@ -1,123 +1,114 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { backendAPI, checkAxiosError } from "../../utils";
+import { backendAPI } from "../../utils";
 
 export const loadPosts = createAsyncThunk("posts/loadPosts", async () => {
-   // try {
-   //     const response = await axios({
-   //        method: "POST",
-   //        url: `${backendAPI}/loadposts`,
-   //     });
-   //     return response;
-   //  } catch (error) {
-   //     checkAxiosError(error);
-   //  }
-   const data = {
-      posts: [
-         {
-            _id: "p1201",
-            caption: "learning redux",
-            content:
-               "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-            media: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR87H-ACcTkVZEN7n3Ymvup3pn_7GSPTFxYCw&usqp=CAU",
-            author: {
-               userID: "u1234",
-               name: "guest",
-               profilePicName: "G",
-               profilePic: "/broken-image.jpg",
-            },
-            likedBy: [{ name: "guest1" }, { name: "guest2" }],
-            commnets: [
-               { name: "guest1", comment: "cool" },
-               { name: "guest2", comment: "nice" },
-            ],
-            createdOn: "26 Jun 2021",
-         },
-         {
-            _id: "p1202",
-            caption: "reading redux",
-            content:
-               "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-            media: "https://res.cloudinary.com/u-and-i/image/upload/v1623929181/images/quiz2-5_vq9qwl.jpg",
-            author: {
-               userID: "u1234",
-               name: "guest",
-               profilePicName: "G",
-               profilePic: "",
-            },
-            likedBy: [{ name: "guest1" }, { name: "guest2" }],
-            commnets: [
-               { name: "guest1", comment: "cool" },
-               { name: "guest2", comment: "nice" },
-            ],
-            createdOn: "26 Jun 2022",
-         },
-      ],
-   };
-
-   return data;
+   const { data } = await axios({
+      method: "GET",
+      url: `${backendAPI}/post`,
+   });
+   return data.userPosts;
 });
 
 export const likeButtonClicked = createAsyncThunk("posts/likeButtonClicked", async (postId) => {
-   try {
-      const response = await axios({
-         method: "POST",
-         url: `${backendAPI}/togglelike`,
-         data: { postId: postId },
-      });
-      return response.data;
-   } catch (error) {
-      checkAxiosError(error);
-   }
+   const response = await axios({
+      method: "POST",
+      url: `${backendAPI}/post/like`,
+      data: { postId: postId },
+   });
+   return response.data.likedPost;
 });
 
-export const postButtonClicked = createAsyncThunk("posts/postButtonClicked", async (postId) => {
-   try {
-      const response = await axios({
-         method: "POST",
-         url: `${backendAPI}/posts/post`,
-         data: { postId: postId },
-      });
-      return response.data;
-   } catch (error) {
-      checkAxiosError(error);
-   }
+export const postButtonClicked = createAsyncThunk("posts/postButtonClicked", async (addPost) => {
+   const response = await axios({
+      method: "POST",
+      url: `${backendAPI}/post/add`,
+      data: { addPost },
+   });
+   return response.data.newPost;
 });
 
 export const deletePostButtonClicked = createAsyncThunk(
    "posts/deletePostButtonClicked",
    async (postId) => {
-      try {
-         const response = await axios({
-            method: "POST",
-            url: `${backendAPI}/posts/delete`,
-            data: { postId: postId },
-         });
-         return response.data;
-      } catch (error) {
-         checkAxiosError(error);
-      }
+      const response = await axios({
+         method: "POST",
+         url: `${backendAPI}/post/delete`,
+         data: { postId },
+      });
+      return response.data.postId;
    }
 );
+
+const initialNewPostState = {
+   caption: "",
+   content: "",
+   media: "",
+};
 
 export const postSlice = createSlice({
    name: "posts",
    initialState: {
       posts: [],
+      newPostModal: false,
+      newPost: initialNewPostState,
    },
-   reducers: {},
+   reducers: {
+      newPostBttnClicked: (state) => {
+         state.newPostModal = true;
+      },
+      newPostCancelBttnClicked: (state) => {
+         state.newPostModal = false;
+      },
+      setNewPostCaption: (state, action) => {
+         state.newPost.caption = action.payload;
+      },
+      setNewPostContent: (state, action) => {
+         state.newPost.content = action.payload;
+      },
+      setNewPostMedia: (state, action) => {
+         state.newPost.media = action.payload;
+      },
+   },
    extraReducers: {
       [loadPosts.fulfilled]: (state, action) => {
-         state.posts = action.payload.posts;
+         state.posts = action.payload;
       },
+
       [likeButtonClicked.fulfilled]: (state, action) => {
-         state.posts = action.payload.posts;
+         state.posts = state.posts.map((post) =>
+            post._id === action.payload._id ? action.payload : post
+         );
+      },
+      [likeButtonClicked.rejected]: (state, action) => {
+         console.log(action.error.message);
+      },
+
+      [postButtonClicked.rejected]: (state, action) => {
+         state.newPostModal = true;
+         console.log(action.error.message);
       },
       [postButtonClicked.fulfilled]: (state, action) => {
-         state.posts = action.payload.posts;
+         state.posts = state.posts.push({ ...action.payload });
+         state.newPost = initialNewPostState;
+      },
+
+      [deletePostButtonClicked.rejected]: (state, action) => {
+         console.log(action.error.message);
+      },
+      [deletePostButtonClicked.fulfilled]: (state, action) => {
+         state.posts = state.posts.filter((post) => post._id !== action.payload);
       },
    },
 });
+
+export const {
+   newPostBttnClicked,
+   newPostCancelBttnClicked,
+   setNewPostCaption,
+   setNewPostContent,
+   setNewPostMedia,
+} = postSlice.actions;
 
 export const usePostSelector = () => useSelector((state) => state.posts);

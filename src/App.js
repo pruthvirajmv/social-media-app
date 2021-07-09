@@ -6,10 +6,11 @@ import { AppNavBar } from "./components";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import { Posts } from "./features/posts/Posts";
 import { Login, SignUp, Profile } from "./pages";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 import { loadUser } from "./features/authentication/authenticationSlice";
+import { setupAuthHeader } from "./utils";
 
 let appTheme = false;
 
@@ -40,16 +41,24 @@ const theme = createMuiTheme({
 export default function App() {
    const dispatch = useDispatch();
 
-   console.log("In app..");
-
-   useEffect(() => {
+   const loginHistory = JSON.parse(localStorage?.getItem("loginSession"));
+   console.log("checked storage");
+   if (loginHistory?.token) {
+      console.log("setting up header");
+      setupAuthHeader(loginHistory.token);
       dispatch(loadUser());
-   }, []);
+   }
+
+   const { pathname } = useLocation();
+   useEffect(() => {
+      window.scrollTo(0, 0);
+   }, [pathname]);
 
    return (
       <ThemeProvider theme={theme}>
          <div className="App">
             <AppNavBar />
+
             <Routes>
                <Route path="/" element={<Posts />} />
                <Route path="/login" element={<Login />} />

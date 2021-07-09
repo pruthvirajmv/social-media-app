@@ -1,5 +1,4 @@
 import React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 import { AuthFormActionType } from "./authForm/AuthFormActionType";
 
 import useAuthForm from "./authForm/useAuthForm";
@@ -16,6 +15,12 @@ import InputBase from "@material-ui/core/InputBase";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import { useDispatch } from "react-redux";
+import {
+   signUpBttnClicked,
+   useUserSelector,
+} from "../../features/authentication/authenticationSlice";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
    root: {
@@ -39,6 +44,40 @@ export function SignUp() {
    const navigate = useNavigate();
    const { authFormState, authFormDispatch } = useAuthForm();
 
+   const dispatch = useDispatch();
+   const { authError } = useUserSelector();
+
+   const signupHandler = () => {
+      if (
+         !(
+            authFormState.firstName ||
+            authFormState.lastName ||
+            authFormState.email ||
+            authFormState.password
+         )
+      ) {
+         return authFormDispatch({
+            type: AuthFormActionType.SET_ERROR_MESSAGE,
+            payload: "Please enter all the fields",
+         });
+      }
+      if (authFormState.password !== authFormState.confirmPassword) {
+         return authFormDispatch({
+            type: AuthFormActionType.SET_ERROR_MESSAGE,
+            payload: "password did not match",
+         });
+      }
+      const user = {
+         firstName: authFormState.firstName,
+         lastName: authFormState.lastName,
+         userName: authFormState.userName,
+         email: authFormState.email,
+         password: authFormState.password,
+      };
+
+      dispatch(signUpBttnClicked({ user, navigate }));
+   };
+
    return (
       <Box display="flex" justifyContent="center" alignItems="center">
          <Paper className={classes.root} elevation={3}>
@@ -54,7 +93,7 @@ export function SignUp() {
                      <InputBase
                         placeholder=" enter first name"
                         margin="dense"
-                        labelWidth={0}
+                        labelwidth={0}
                         type="text"
                         required={true}
                         onChange={(e) =>
@@ -68,18 +107,38 @@ export function SignUp() {
                </div>
                <div>
                   <InputLabel className={classes.authFormLabel} htmlFor="outlined-adornment-email">
-                     Last name
+                     Last Name
                   </InputLabel>
                   <FormControl fullWidth className={classes.margin} variant="outlined">
                      <InputBase
                         placeholder=" enter last name"
                         margin="dense"
-                        labelWidth={0}
+                        labelwidth={0}
                         type="text"
                         required={true}
                         onChange={(e) =>
                            authFormDispatch({
                               type: AuthFormActionType.SET_LAST_NAME,
+                              payload: e.target.value,
+                           })
+                        }
+                     />
+                  </FormControl>
+               </div>
+               <div>
+                  <InputLabel className={classes.authFormLabel} htmlFor="outlined-adornment-email">
+                     Username
+                  </InputLabel>
+                  <FormControl fullWidth className={classes.margin} variant="outlined">
+                     <InputBase
+                        placeholder=" enter user name"
+                        margin="dense"
+                        labelwidth={0}
+                        type="text"
+                        required={true}
+                        onChange={(e) =>
+                           authFormDispatch({
+                              type: AuthFormActionType.SET_USER_NAME,
                               payload: e.target.value,
                            })
                         }
@@ -94,7 +153,7 @@ export function SignUp() {
                      <InputBase
                         placeholder=" enter email"
                         margin="dense"
-                        labelWidth={0}
+                        labelwidth={0}
                         type="text"
                         required={true}
                         onChange={(e) =>
@@ -118,7 +177,7 @@ export function SignUp() {
                         margin="dense"
                         type={authFormState.showPassword ? "text" : "password"}
                         required={true}
-                        labelWidth={0}
+                        labelwidth={0}
                         onChange={(e) =>
                            authFormDispatch({
                               type: AuthFormActionType.SET_PASSWORD,
@@ -155,7 +214,7 @@ export function SignUp() {
                         margin="dense"
                         type={authFormState.showConfirmPassword ? "text" : "password"}
                         required={true}
-                        labelWidth={0}
+                        labelwidth={0}
                         onChange={(e) =>
                            authFormDispatch({
                               type: AuthFormActionType.SET_CONFIRM_PASSWORD,
@@ -190,6 +249,7 @@ export function SignUp() {
                      color="primary"
                      variant="contained"
                      disableElevation={true}
+                     onClick={signupHandler}
                      disabled={authFormState.isLoading ? true : false}>
                      {authFormState.isLoading && (
                         <CircularProgress color="primary" size="1.2rem" thickness={5} />
@@ -198,7 +258,7 @@ export function SignUp() {
                   </Button>
                </div>
                <Typography variant="body1" color="error" align="center">
-                  {authFormState.errorMessage}
+                  {authFormState.errorMessage || authError}
                </Typography>
             </form>
          </Paper>

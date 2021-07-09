@@ -2,8 +2,12 @@ import "./appNavBar.css";
 import "../../App.css";
 
 import { NavLink } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { newPostBttnClicked } from "../../features/posts/postSlice";
 
 export function AppNavBar() {
+   const dispatch = useDispatch();
+
    return (
       <>
          <nav className="nav nav-dark">
@@ -19,9 +23,11 @@ export function AppNavBar() {
                <NavLink end to="/profile" activeClassName="active-page">
                   <span>Profile</span>
                </NavLink>
-               <NavLink end to="/leaderboard" activeClassName="active-page">
-                  <span>Standings</span>
-               </NavLink>
+               <div>
+                  <button onClick={() => dispatch(newPostBttnClicked())}>
+                     <span>Post</span>
+                  </button>
+               </div>
                <NavLink end to="/login" activeClassName="active-page">
                   <span>Login</span>
                   {/* <i className="fa fa-user fa-lg" aria-hidden="true"></i> */}

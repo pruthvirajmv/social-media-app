@@ -25,18 +25,16 @@ export const LikedByUsersModal = ({ open, likedUsers, onClose }) => {
       <Dialog open={open} aria-labelledby="simple-dialog-title" onClose={onClose}>
          <DialogTitle id="simple-dialog-title">Liked By Users</DialogTitle>
          <List className={classes.root}>
-            {likedUsers.map((user) => (
-               <>
-                  <ListItem key={user.name}>
-                     <ListItemAvatar button>
-                        <Avatar alt={user.name} src={user.profilePic}></Avatar>
-                     </ListItemAvatar>
-                     <ListItemText primary={user.name} secondary={user.name} />
-                     <Button onClick={onClose} color="primary">
-                        Follow
-                     </Button>
-                  </ListItem>
-               </>
+            {likedUsers.map(({ user }, id) => (
+               <ListItem key={id}>
+                  <ListItemAvatar button>
+                     <Avatar alt={user.profilePicName} src={user.profilePic}></Avatar>
+                  </ListItemAvatar>
+                  <ListItemText primary={user.userName} secondary={user.fullName} />
+                  <Button onClick={onClose} color="primary">
+                     Follow
+                  </Button>
+               </ListItem>
             ))}
          </List>
       </Dialog>

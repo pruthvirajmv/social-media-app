@@ -5,6 +5,7 @@ export default function useAuthForm() {
    const authFormInitialState = {
       firstName: "",
       lastName: "",
+      userName: "",
       email: "",
       password: "",
       confirmPassword: "",
