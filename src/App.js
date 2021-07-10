@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import { loadUser } from "./features/authentication/authenticationSlice";
 import { setupAuthHeader } from "./utils";
 import { loadPosts } from "./features/posts/postSlice";
+import { PrivateRoute } from "./PrivateRoute/PrivateRoute";
 
 let appTheme = false;
 
@@ -62,11 +63,11 @@ export default function App() {
             <AppNavBar />
 
             <Routes>
-               <Route path="/" element={<Posts />} />
+               <PrivateRoute path="/" element={<Posts />} />
                <Route path="/login" element={<Login />} />
                <Route path="/signup" element={<SignUp />} />
-               <Route path="/profile" element={<Profile />} />
-               <Route path="/profile/edit" element={<UpdateProfile />} />
+               <PrivateRoute path="/profile" element={<Profile />} />
+               <PrivateRoute path="/profile/edit" element={<UpdateProfile />} />
             </Routes>
          </div>
       </ThemeProvider>
