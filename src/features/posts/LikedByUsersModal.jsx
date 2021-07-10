@@ -11,6 +11,8 @@ import {
    Button,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { useDispatch } from "react-redux";
+import { followBttnClicked, useUserSelector } from "../authentication/authenticationSlice";
 
 const useStyles = makeStyles((theme) => ({
    root: {
@@ -19,20 +21,26 @@ const useStyles = makeStyles((theme) => ({
    },
 }));
 
-export const LikedByUsersModal = ({ open, likedUsers, onClose }) => {
+export const LikedByUsersModal = ({ open, likedUsers, onClose, modalHead }) => {
    const classes = useStyles();
+   const dispatch = useDispatch();
+   const { user } = useUserSelector();
+   const followingList = user.following;
+
    return (
       <Dialog open={open} aria-labelledby="simple-dialog-title" onClose={onClose}>
-         <DialogTitle id="simple-dialog-title">Liked By Users</DialogTitle>
+         <DialogTitle id="simple-dialog-title">{modalHead}</DialogTitle>
          <List className={classes.root}>
-            {likedUsers.map(({ user }, id) => (
+            {likedUsers?.map(({ user }, id) => (
                <ListItem key={id}>
                   <ListItemAvatar button>
                      <Avatar alt={user.profilePicName} src={user.profilePic}></Avatar>
                   </ListItemAvatar>
                   <ListItemText primary={user.userName} secondary={user.fullName} />
-                  <Button onClick={onClose} color="primary">
-                     Follow
+                  <Button onClick={() => dispatch(followBttnClicked(user._id))} color="primary">
+                     {followingList.some((following) => following.user._id === user._id)
+                        ? "following"
+                        : "follow"}
                   </Button>
                </ListItem>
             ))}

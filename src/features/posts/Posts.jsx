@@ -17,16 +17,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const Posts = () => {
-   const dispatch = useDispatch();
-
    const classes = useStyles();
 
-   useEffect(() => {
-      dispatch(loadPosts());
-   }, [dispatch]);
-
    const { posts } = usePostSelector();
-
    return (
       <>
          <Grid

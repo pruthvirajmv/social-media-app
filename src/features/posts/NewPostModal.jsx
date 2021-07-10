@@ -101,7 +101,6 @@ export function NewPostModal() {
       <>
          <Dialog
             aria-labelledby="customized-dialog-title"
-            // disableEscapeKeyDown="true"
             open={newPostModal}
             onClose={() => dispatch(newPostCancelBttnClicked())}>
             <DialogTitle id="customized-dialog-title">

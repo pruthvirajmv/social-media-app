@@ -51,12 +51,13 @@ export const signUpBttnClicked = createAsyncThunk(
 
 export const profileUpdateBttnClicked = createAsyncThunk(
    "user/profileUpdateBttnClicked",
-   async (updateProfile) => {
+   async ({ updateProfile, navigate }) => {
       const { data } = await axios({
          method: "POST",
-         url: `${backendAPI}/user/update`,
-         data: { user: updateProfile },
+         url: `${backendAPI}/user/updateprofile`,
+         data: { updateUser: updateProfile },
       });
+      navigate("/profile");
       return data;
    }
 );
@@ -68,6 +69,15 @@ export const bookmarkBttnClicked = createAsyncThunk("posts/bookmarkBttnClicked",
       data: { postId: postId },
    });
    return data.bookmarks;
+});
+
+export const followBttnClicked = createAsyncThunk("user/followBttnClicked", async (userId) => {
+   const { data } = await axios({
+      method: "POST",
+      url: `${backendAPI}/user/follow`,
+      data: { userId },
+   });
+   return data.following;
 });
 
 export const userSlice = createSlice({
@@ -141,6 +151,15 @@ export const userSlice = createSlice({
          state.user.bookmarks = action.payload;
       },
       [bookmarkBttnClicked.rejected]: (state, action) => {
+         console.log(action.error.message);
+      },
+
+      // -------- follow user----------- //
+
+      [followBttnClicked.fulfilled]: (state, action) => {
+         state.user.following = action.payload;
+      },
+      [followBttnClicked.rejected]: (state, action) => {
          console.log(action.error.message);
       },
    },

@@ -76,6 +76,8 @@ export const postSlice = createSlice({
          state.posts = action.payload;
       },
 
+      // -------- post like----------- //
+
       [likeButtonClicked.fulfilled]: (state, action) => {
          state.posts = state.posts.map((post) =>
             post._id === action.payload._id ? action.payload : post
@@ -85,14 +87,19 @@ export const postSlice = createSlice({
          console.log(action.error.message);
       },
 
+      // -------- new post----------- //
+
       [postButtonClicked.rejected]: (state, action) => {
          state.newPostModal = true;
          console.log(action.error.message);
       },
       [postButtonClicked.fulfilled]: (state, action) => {
-         state.posts = state.posts.push({ ...action.payload });
+         state.posts.push({ ...action.payload });
          state.newPost = initialNewPostState;
+         state.newPostModal = false;
       },
+
+      // -------- delet post----------- //
 
       [deletePostButtonClicked.rejected]: (state, action) => {
          console.log(action.error.message);

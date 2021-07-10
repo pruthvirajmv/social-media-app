@@ -5,12 +5,13 @@ import { AppNavBar } from "./components";
 
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import { Posts } from "./features/posts/Posts";
-import { Login, SignUp, Profile } from "./pages";
+import { Login, SignUp, Profile, UpdateProfile } from "./pages";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 import { loadUser } from "./features/authentication/authenticationSlice";
 import { setupAuthHeader } from "./utils";
+import { loadPosts } from "./features/posts/postSlice";
 
 let appTheme = false;
 
@@ -47,6 +48,7 @@ export default function App() {
       console.log("setting up header");
       setupAuthHeader(loginHistory.token);
       dispatch(loadUser());
+      dispatch(loadPosts());
    }
 
    const { pathname } = useLocation();
@@ -64,6 +66,7 @@ export default function App() {
                <Route path="/login" element={<Login />} />
                <Route path="/signup" element={<SignUp />} />
                <Route path="/profile" element={<Profile />} />
+               <Route path="/profile/edit" element={<UpdateProfile />} />
             </Routes>
          </div>
       </ThemeProvider>

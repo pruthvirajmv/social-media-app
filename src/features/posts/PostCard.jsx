@@ -15,22 +15,31 @@ import Divider from "@material-ui/core/Divider";
 import CardMedia from "@material-ui/core/CardMedia";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
+import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 
 import { LikedByUsersModal } from "./LikedByUsersModal";
 import { useDispatch } from "react-redux";
 import { deletePostButtonClicked, likeButtonClicked } from "./postSlice";
-import { bookmarkBttnClicked, useUserSelector } from "../authentication/authenticationSlice";
+import {
+   bookmarkBttnClicked,
+   useUserSelector,
+   followBttnClicked,
+} from "../authentication/authenticationSlice";
 
 const useStyles = makeStyles((theme) => ({
    root: {
-      maxWidth: 460,
+      width: "100vh",
+
+      "@media screen and (min-width: 460px)": {
+         width: 460,
+      },
    },
    bookmarkIcon: {
       marginLeft: "auto",
    },
    cardFooter: {
-      padding: "0 1rem 1rem",
+      padding: "0 1rem 0",
    },
 }));
 
@@ -69,12 +78,20 @@ export const PostCard = ({ post }) => {
             title={post.author.userName}
             subheader={postCreatedOn(post.createdOn)}
             action={
-               post.author._id === user._id && (
+               post.author._id === user._id ? (
                   <IconButton
                      aria-label="delete post"
                      onClick={() => dispatch(deletePostButtonClicked(post._id))}>
                      <DeleteRoundedIcon />
                   </IconButton>
+               ) : (
+                  <Button
+                     onClick={() => dispatch(followBttnClicked(post.author._id))}
+                     color="primary">
+                     {user.following.some((following) => following.user._id === post.author._id)
+                        ? "following"
+                        : "follow"}
+                  </Button>
                )
             }
          />
@@ -87,34 +104,37 @@ export const PostCard = ({ post }) => {
                {post.content}
             </Typography>
          </CardContent>
-         <Grid>
-            <Typography
-               variant="subtitle2"
-               color="textSecondary"
-               component="p"
-               className={classes.cardFooter}>
-               {post.likedBy.length === 0 && "Be the first to like"}
-               {post.likedBy.length > 0 && (
-                  <Link
-                     component="button"
-                     variant="subtitle2"
-                     color="textSecondary"
-                     onClick={() => {
-                        setLikedByModal((prev) => !prev);
-                     }}>
-                     Liked by {post.likedBy.length} people
-                  </Link>
-               )}
-            </Typography>
-            <Typography
-               variant="subtitle2"
-               color="textPrimary"
-               component="p"
-               className={classes.cardFooter}>
-               {post.author.userName} {post.caption}
-            </Typography>
+         <Grid direction="column" container spacing={1}>
+            <Grid item>
+               <Typography
+                  variant="subtitle2"
+                  color="textSecondary"
+                  component="p"
+                  className={classes.cardFooter}>
+                  {post.likedBy.length === 0 && "Be the first to like"}
+                  {post.likedBy.length > 0 && (
+                     <Link
+                        component="button"
+                        variant="subtitle2"
+                        color="textSecondary"
+                        onClick={() => {
+                           setLikedByModal((prev) => !prev);
+                        }}>
+                        liked by {post.likedBy.length} people
+                     </Link>
+                  )}
+               </Typography>
+            </Grid>
+            <Grid item>
+               <Typography
+                  variant="subtitle2"
+                  color="textPrimary"
+                  component="p"
+                  className={classes.cardFooter}>
+                  {post.author.userName} {post.caption}
+               </Typography>
+            </Grid>
          </Grid>
-         {/* <CardContent></CardContent> */}
 
          <CardActions disableSpacing>
             <IconButton
@@ -147,6 +167,7 @@ export const PostCard = ({ post }) => {
             open={likedByModal}
             likedUsers={post.likedBy}
             onClose={() => setLikedByModal((prev) => !prev)}
+            modalHead={"liked by"}
          />
       </Card>
    );
