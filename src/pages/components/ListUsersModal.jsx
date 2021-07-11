@@ -12,7 +12,8 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useDispatch } from "react-redux";
-import { followBttnClicked, useUserSelector } from "../authentication/authenticationSlice";
+import { followBttnClicked, useUserSelector } from "../../features";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
    root: {
@@ -21,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
    },
 }));
 
-export const LikedByUsersModal = ({ open, likedUsers, onClose, modalHead }) => {
+export const ListUsersModal = ({ open, likedUsers, onClose, modalHead }) => {
    const classes = useStyles();
    const dispatch = useDispatch();
    const { user } = useUserSelector();
@@ -34,7 +35,9 @@ export const LikedByUsersModal = ({ open, likedUsers, onClose, modalHead }) => {
             {likedUsers?.map(({ user }, id) => (
                <ListItem key={id}>
                   <ListItemAvatar button>
-                     <Avatar alt={user.profilePicName} src={user.profilePic}></Avatar>
+                     <Link to={`/profile/${user.userName}`}>
+                        <Avatar alt={user.profilePicName} src={user.profilePic}></Avatar>
+                     </Link>
                   </ListItemAvatar>
                   <ListItemText primary={user.userName} secondary={user.fullName} />
                   <Button onClick={() => dispatch(followBttnClicked(user._id))} color="primary">

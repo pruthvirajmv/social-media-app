@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -13,13 +16,8 @@ import Avatar from "@material-ui/core/Avatar";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import PostAddIcon from "@material-ui/icons/PostAdd";
 import HomeIcon from "@material-ui/icons/Home";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import {
-   logoutBttnClicked,
-   useUserSelector,
-} from "../../features/authentication/authenticationSlice";
-import { newPostBttnClicked } from "../../features/posts/postSlice";
+
+import { logoutBttnClicked, useUserSelector, newPostBttnClicked } from "../../../features";
 
 const useStyles = makeStyles((theme) => ({
    grow: {
@@ -63,8 +61,9 @@ const useStyles = makeStyles((theme) => ({
       width: "20ch",
    },
    smallAvatar: {
-      width: theme.spacing(3.5),
-      height: theme.spacing(3.5),
+      fontSize: "1rem",
+      width: theme.spacing(4.5),
+      height: theme.spacing(4.5),
    },
    sectionDesktop: {
       display: "none",
@@ -80,9 +79,9 @@ const useStyles = makeStyles((theme) => ({
    },
 }));
 
-export function NavBarDesktop() {
+export function NavBarTop() {
    const classes = useStyles();
-   const [anchorEl, setAnchorEl] = React.useState(null);
+   const [anchorEl, setAnchorEl] = useState(null);
    const navigate = useNavigate();
    const dispatch = useDispatch();
    const { user } = useUserSelector();

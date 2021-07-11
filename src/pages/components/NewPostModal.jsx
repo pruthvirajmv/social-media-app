@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useDropzone } from "react-dropzone";
+import { useDispatch } from "react-redux";
 
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
@@ -15,6 +16,8 @@ import InputBase from "@material-ui/core/InputBase";
 import Box from "@material-ui/core/Box";
 import CloseIcon from "@material-ui/icons/Close";
 import ImageIcon from "@material-ui/icons/Image";
+import { makeStyles } from "@material-ui/core/styles";
+
 import {
    newPostCancelBttnClicked,
    postButtonClicked,
@@ -22,11 +25,8 @@ import {
    setNewPostContent,
    setNewPostMedia,
    usePostSelector,
-} from "./postSlice";
-import { useDispatch } from "react-redux";
-
-import { makeStyles } from "@material-ui/core/styles";
-import { useUserSelector } from "../authentication/authenticationSlice";
+   useUserSelector,
+} from "../../features";
 
 import { checkAxiosError, CLOUDINARY_BASE_URL, CLOUDINARY_PRESET } from "../../utils";
 

@@ -1,9 +1,8 @@
 import "./appNavBar.css";
-import "../../App.css";
 
 import { NavLink } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { newPostBttnClicked } from "../../features/posts/postSlice";
+import { newPostBttnClicked } from "../../../features/posts/postSlice";
 
 export function AppNavBar() {
    const dispatch = useDispatch();

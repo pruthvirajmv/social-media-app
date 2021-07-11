@@ -18,20 +18,25 @@ import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 
-import { LikedByUsersModal } from "./LikedByUsersModal";
+import { ListUsersModal } from "../../components/ListUsersModal";
 import { useDispatch } from "react-redux";
-import { deletePostButtonClicked, likeButtonClicked } from "./postSlice";
+import { deletePostButtonClicked, likeButtonClicked } from "../../../features";
 import {
    bookmarkBttnClicked,
    useUserSelector,
    followBttnClicked,
-} from "../authentication/authenticationSlice";
+} from "../../../features/authentication/authenticationSlice";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
    root: {
       width: "100%",
-      "@media screen and (min-width: 460px)": {
+      "@media screen and (min-width: 600px)": {
          width: 460,
+      },
+      "& .MuiLink-root": {
+         cursor: "pointer",
+         color: "initial",
       },
    },
    bookmarkIcon: {
@@ -40,10 +45,14 @@ const useStyles = makeStyles((theme) => ({
    cardFooter: {
       padding: "0 1rem 0",
    },
+   avatar: {
+      cursor: "pointer",
+   },
 }));
 
 export const PostCard = ({ post }) => {
    const classes = useStyles();
+   const navigate = useNavigate();
 
    const [likedByModal, setLikedByModal] = useState(false);
 
@@ -62,7 +71,7 @@ export const PostCard = ({ post }) => {
       if (postedTimeAgo > 3600 && postedTimeAgo < 86400) {
          return `${Math.floor(postedTimeAgo / 3600)} hr ago`;
       }
-      const createdDate = new Date(post.createdOn);
+      const createdDate = new Date(Number(postedTime));
       return createdDate.toDateString();
    };
 
@@ -70,11 +79,28 @@ export const PostCard = ({ post }) => {
       <Card variant="outlined" className={classes.root}>
          <CardHeader
             avatar={
-               <Avatar alt={post.author.profilePicName} src={post.author.profilePic}>
+               <Avatar
+                  className={classes.avatar}
+                  alt={post.author.profilePicName}
+                  src={post.author.profilePic}
+                  onClick={() =>
+                     post.author._id === user._id
+                        ? navigate("/profile")
+                        : navigate(`/profile/${post.author.userName}`)
+                  }>
                   {post.author.profilePicName}
                </Avatar>
             }
-            title={post.author.userName}
+            title={
+               <Link
+                  onClick={() =>
+                     post.author._id === user._id
+                        ? navigate("/profile")
+                        : navigate(`/profile/${post.author.userName}`)
+                  }>
+                  {post.author.userName}
+               </Link>
+            }
             subheader={postCreatedOn(post.createdOn)}
             action={
                post.author._id === user._id ? (
@@ -162,7 +188,7 @@ export const PostCard = ({ post }) => {
             </IconButton>
          </CardActions>
 
-         <LikedByUsersModal
+         <ListUsersModal
             open={likedByModal}
             likedUsers={post.likedBy}
             onClose={() => setLikedByModal((prev) => !prev)}

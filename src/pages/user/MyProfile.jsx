@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import Box from "@material-ui/core/Box";
 import Avatar from "@material-ui/core/Avatar";
@@ -8,20 +10,13 @@ import IconButton from "@material-ui/core/IconButton";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
-
 import Paper from "@material-ui/core/Paper";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 
-import {
-   logoutBttnClicked,
-   useUserSelector,
-} from "../../features/authentication/authenticationSlice";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { usePostSelector } from "../../features/posts/postSlice";
-import { PostCard } from "../../features/posts/PostCard";
-import { LikedByUsersModal } from "../../features/posts/LikedByUsersModal";
+import { logoutBttnClicked, useUserSelector, usePostSelector } from "../../features";
+import { PostCard } from "../Home/components/PostCard";
+import { ListUsersModal } from "../components/ListUsersModal";
 
 const useStyles = makeStyles((theme) => ({
    root: {
@@ -53,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
    },
 }));
 
-export const Profile = () => {
+export const MyProfile = () => {
    const classes = useStyles();
    const dispatch = useDispatch();
    const navigate = useNavigate();
@@ -172,7 +167,7 @@ export const Profile = () => {
                </Grid>
             </Box>
          )}
-         <LikedByUsersModal
+         <ListUsersModal
             open={showList}
             likedUsers={showList === "followers" ? user.followers : user.following}
             onClose={() => setShowList("")}
