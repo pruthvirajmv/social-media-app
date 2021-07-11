@@ -1,5 +1,5 @@
 import React from "react";
-import { alpha, makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
@@ -8,40 +8,40 @@ import InputBase from "@material-ui/core/InputBase";
 import Badge from "@material-ui/core/Badge";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
-import MenuIcon from "@material-ui/icons/Menu";
 import SearchIcon from "@material-ui/icons/Search";
-import AccountCircle from "@material-ui/icons/AccountCircle";
+import Avatar from "@material-ui/core/Avatar";
 import NotificationsIcon from "@material-ui/icons/Notifications";
-import MoreIcon from "@material-ui/icons/MoreVert";
 import PostAddIcon from "@material-ui/icons/PostAdd";
+import HomeIcon from "@material-ui/icons/Home";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import {
+   logoutBttnClicked,
+   useUserSelector,
+} from "../../features/authentication/authenticationSlice";
+import { newPostBttnClicked } from "../../features/posts/postSlice";
 
 const useStyles = makeStyles((theme) => ({
    grow: {
       flexGrow: 1,
    },
+   toolBar: {
+      justifyContent: "space-around",
+   },
    menuButton: {
       marginRight: theme.spacing(2),
    },
-   title: {
-      display: "none",
-      [theme.breakpoints.up("sm")]: {
-         display: "block",
-      },
-   },
+
    search: {
       position: "relative",
       borderRadius: theme.shape.borderRadius,
-      //   backgroundColor: alpha(theme.palette.common.white, 0.15),
-      //   "&:hover": {
-      //      backgroundColor: alpha(theme.palette.common.white, 0.25),
-      //   },
-      marginRight: theme.spacing(2),
-      marginLeft: 0,
-      width: "100%",
-      [theme.breakpoints.up("sm")]: {
-         marginLeft: theme.spacing(3),
-         width: "auto",
+      backgroundColor: "#EEF2FF",
+      "&:hover": {
+         backgroundColor: "white",
       },
+      marginLeft: "1rem",
+      alignSelf: "center",
+      width: "auto",
    },
    searchIcon: {
       padding: theme.spacing(0, 2),
@@ -60,10 +60,11 @@ const useStyles = makeStyles((theme) => ({
       // vertical padding + font size from searchIcon
       paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
       transition: theme.transitions.create("width"),
-      width: "100%",
-      [theme.breakpoints.up("md")]: {
-         width: "20ch",
-      },
+      width: "20ch",
+   },
+   smallAvatar: {
+      width: theme.spacing(3.5),
+      height: theme.spacing(3.5),
    },
    sectionDesktop: {
       display: "none",
@@ -82,26 +83,18 @@ const useStyles = makeStyles((theme) => ({
 export function NavBarDesktop() {
    const classes = useStyles();
    const [anchorEl, setAnchorEl] = React.useState(null);
-   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+   const navigate = useNavigate();
+   const dispatch = useDispatch();
+   const { user } = useUserSelector();
 
    const isMenuOpen = Boolean(anchorEl);
-   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
    const handleProfileMenuOpen = (event) => {
       setAnchorEl(event.currentTarget);
    };
 
-   const handleMobileMenuClose = () => {
-      setMobileMoreAnchorEl(null);
-   };
-
    const handleMenuClose = () => {
       setAnchorEl(null);
-      handleMobileMenuClose();
-   };
-
-   const handleMobileMenuOpen = (event) => {
-      setMobileMoreAnchorEl(event.currentTarget);
    };
 
    const menuId = "primary-search-account-menu";
@@ -114,63 +107,20 @@ export function NavBarDesktop() {
          transformOrigin={{ vertical: "top", horizontal: "right" }}
          open={isMenuOpen}
          onClose={handleMenuClose}>
-         <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-         <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-      </Menu>
-   );
-
-   const mobileMenuId = "primary-search-account-menu-mobile";
-   const renderMobileMenu = (
-      <Menu
-         anchorEl={mobileMoreAnchorEl}
-         anchorOrigin={{ vertical: "top", horizontal: "right" }}
-         id={mobileMenuId}
-         keepMounted
-         transformOrigin={{ vertical: "top", horizontal: "right" }}
-         open={isMobileMenuOpen}
-         onClose={handleMobileMenuClose}>
-         <MenuItem>
-            <IconButton aria-label="show 4 new mails" color="inherit">
-               <Badge badgeContent={4} color="secondary">
-                  <PostAddIcon />
-               </Badge>
-            </IconButton>
-            <p>Messages</p>
-         </MenuItem>
-         <MenuItem>
-            <IconButton aria-label="show 11 new notifications" color="inherit">
-               <Badge badgeContent={11} color="secondary">
-                  <NotificationsIcon />
-               </Badge>
-            </IconButton>
-            <p>Notifications</p>
-         </MenuItem>
-         <MenuItem onClick={handleProfileMenuOpen}>
-            <IconButton
-               aria-label="account of current user"
-               aria-controls="primary-search-account-menu"
-               aria-haspopup="true"
-               color="inherit">
-               <AccountCircle />
-            </IconButton>
-            <p>Profile</p>
-         </MenuItem>
+         <MenuItem onClick={() => navigate("/profile")}>Profile</MenuItem>
+         <MenuItem onClick={() => dispatch(logoutBttnClicked())}>Logout</MenuItem>
       </Menu>
    );
 
    return (
       <div className={classes.grow}>
-         <AppBar position="static">
-            <Toolbar>
-               <IconButton
-                  edge="start"
-                  className={classes.menuButton}
-                  color="inherit"
-                  aria-label="open drawer">
-                  <MenuIcon />
-               </IconButton>
-               <Typography className={classes.title} variant="h6" noWrap>
-                  Material-UI
+         <AppBar position="fixed">
+            <Toolbar className={classes.toolBar}>
+               <Typography variant="h6" className={classes.sectionDesktop}>
+                  Baddy-Buzz
+               </Typography>
+               <Typography variant="h6" className={classes.sectionMobile}>
+                  BB
                </Typography>
                <div className={classes.search}>
                   <div className={classes.searchIcon}>
@@ -185,15 +135,21 @@ export function NavBarDesktop() {
                      inputProps={{ "aria-label": "search" }}
                   />
                </div>
-               <div className={classes.grow} />
                <div className={classes.sectionDesktop}>
-                  <IconButton aria-label="show 4 new mails" color="inherit">
-                     <Badge badgeContent={4} color="secondary">
-                        <PostAddIcon />
-                     </Badge>
+                  <IconButton
+                     aria-label="show 4 new mails"
+                     color="inherit"
+                     onClick={() => navigate("/")}>
+                     <HomeIcon />
+                  </IconButton>
+                  <IconButton
+                     aria-label="show 4 new mails"
+                     color="inherit"
+                     onClick={() => dispatch(newPostBttnClicked())}>
+                     <PostAddIcon />
                   </IconButton>
                   <IconButton aria-label="show 17 new notifications" color="inherit">
-                     <Badge badgeContent={17} color="secondary">
+                     <Badge badgeContent={1} color="secondary">
                         <NotificationsIcon />
                      </Badge>
                   </IconButton>
@@ -204,22 +160,23 @@ export function NavBarDesktop() {
                      aria-haspopup="true"
                      onClick={handleProfileMenuOpen}
                      color="inherit">
-                     <AccountCircle />
+                     <Avatar
+                        alt={user.profilePicName}
+                        src={user.profilePic}
+                        className={classes.smallAvatar}>
+                        {user.profilePicName}
+                     </Avatar>
                   </IconButton>
                </div>
                <div className={classes.sectionMobile}>
-                  <IconButton
-                     aria-label="show more"
-                     aria-controls={mobileMenuId}
-                     aria-haspopup="true"
-                     onClick={handleMobileMenuOpen}
-                     color="inherit">
-                     <MoreIcon />
+                  <IconButton aria-label="show more" aria-haspopup="true" color="inherit">
+                     <Badge badgeContent={1} color="secondary">
+                        <NotificationsIcon />
+                     </Badge>
                   </IconButton>
                </div>
             </Toolbar>
          </AppBar>
-         {renderMobileMenu}
          {renderMenu}
       </div>
    );

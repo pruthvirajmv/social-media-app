@@ -60,16 +60,17 @@ export default function App() {
    return (
       <ThemeProvider theme={theme}>
          <div className="App">
-            <AppNavBar />
-
-            {/* <NavBarDesktop /> */}
-            <Routes>
-               <PrivateRoute path="/" element={<Posts />} />
-               <Route path="/login" element={<Login />} />
-               <Route path="/signup" element={<SignUp />} />
-               <PrivateRoute path="/profile" element={<Profile />} />
-               <PrivateRoute path="/profile/edit" element={<UpdateProfile />} />
-            </Routes>
+            {/* <AppNavBar /> */}
+            <NavBarDesktop />
+            <main className="AppMain">
+               <Routes>
+                  <PrivateRoute path="/" element={<Posts />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/signup" element={<SignUp />} />
+                  <PrivateRoute path="/profile" element={<Profile />} />
+                  <PrivateRoute path="/profile/edit" element={<UpdateProfile />} />
+               </Routes>
+            </main>
          </div>
       </ThemeProvider>
    );

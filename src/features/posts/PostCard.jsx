@@ -29,8 +29,7 @@ import {
 
 const useStyles = makeStyles((theme) => ({
    root: {
-      width: "100vh",
-
+      width: "100%",
       "@media screen and (min-width: 460px)": {
          width: 460,
       },

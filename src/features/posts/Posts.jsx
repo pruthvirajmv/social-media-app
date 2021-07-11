@@ -1,10 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import Grid from "@material-ui/core/Grid";
 
 import { PostCard } from "./PostCard";
-import { loadPosts, usePostSelector } from "./postSlice";
-import { useDispatch } from "react-redux";
+import { usePostSelector } from "./postSlice";
 import { NewPostModal } from "./NewPostModal";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -13,6 +12,11 @@ const useStyles = makeStyles((theme) => ({
    root: {
       width: "100%",
       rowGap: "1rem",
+   },
+   gridItem: {
+      "@media screen and (max-width: 460px)": {
+         width: "100%",
+      },
    },
 }));
 
@@ -30,7 +34,7 @@ export const Posts = () => {
             className={classes.root}>
             {posts.length === 0 && <div>No Posts</div>}
             {posts.map((post) => (
-               <Grid key={post._id} item>
+               <Grid key={post._id} item className={classes.gridItem}>
                   <PostCard post={post} />
                </Grid>
             ))}
