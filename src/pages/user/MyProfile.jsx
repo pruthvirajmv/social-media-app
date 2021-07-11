@@ -59,9 +59,10 @@ export const MyProfile = () => {
    const userPosts = posts.filter(({ author }) => author._id === user._id);
 
    let bookmarks = user?.bookmarks;
-   bookmarks = bookmarks
-      ? bookmarks.map(({ post }) => posts.find(({ _id }) => _id === post._id))
-      : bookmarks;
+   bookmarks =
+      bookmarks.length > 0
+         ? bookmarks.map(({ post }) => posts.find(({ _id }) => _id === post._id))
+         : bookmarks;
 
    const [value, setValue] = useState(0);
    const handleChange = (event, newValue) => {

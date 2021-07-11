@@ -17,6 +17,7 @@ export const likeButtonClicked = createAsyncThunk("posts/likeButtonClicked", asy
       url: `${backendAPI}/post/like`,
       data: { postId: postId },
    });
+   console.log(response.data.likedPost);
    return response.data.likedPost;
 });
 
@@ -80,7 +81,7 @@ export const postSlice = createSlice({
 
       [likeButtonClicked.fulfilled]: (state, action) => {
          state.posts = state.posts.map((post) =>
-            post._id === action.payload._id ? action.payload : post
+            post._id === action.payload._id ? { ...post, likedBy: action.payload.likedBy } : post
          );
       },
       [likeButtonClicked.rejected]: (state, action) => {
