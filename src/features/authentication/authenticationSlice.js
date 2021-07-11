@@ -83,7 +83,7 @@ export const followBttnClicked = createAsyncThunk("user/followBttnClicked", asyn
 export const userSlice = createSlice({
    name: "user",
    initialState: {
-      authStatus: "",
+      authStatus: "loggedOut",
       authError: "",
       user: {},
    },

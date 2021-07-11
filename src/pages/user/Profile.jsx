@@ -76,7 +76,7 @@ export const Profile = () => {
 
    const logoutHandler = () => {
       dispatch(logoutBttnClicked());
-      navigate("/");
+      navigate("/login");
       localStorage.clear();
    };
 

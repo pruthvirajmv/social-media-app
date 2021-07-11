@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import "./App.css";
 
-import { AppNavBar } from "./components";
+import { AppNavBar, NavBarDesktop } from "./components";
 
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import { Posts } from "./features/posts/Posts";
@@ -62,6 +62,7 @@ export default function App() {
          <div className="App">
             <AppNavBar />
 
+            {/* <NavBarDesktop /> */}
             <Routes>
                <PrivateRoute path="/" element={<Posts />} />
                <Route path="/login" element={<Login />} />

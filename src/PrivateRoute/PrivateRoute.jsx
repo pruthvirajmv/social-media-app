@@ -3,11 +3,12 @@ import { Route, Navigate } from "react-router-dom";
 import { useUserSelector } from "../features/authentication/authenticationSlice";
 
 export function PrivateRoute({ path, ...props }) {
-   const { authState } = useUserSelector();
+   const { authStatus } = useUserSelector();
 
-   return authState === "loggedIn" ? (
-      <Route path={path} {...props} />
-   ) : (
-      <Navigate state={{ from: path }} replace to="/login" />
+   return (
+      <>
+         {authStatus === "loggedIn" && <Route path={path} {...props} />}
+         {authStatus === "loggedOut" && <Navigate state={{ from: path }} replace to="/login" />}
+      </>
    );
 }

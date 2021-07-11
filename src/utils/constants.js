@@ -1,4 +1,4 @@
-export const backendAPI = "https://baddybuzz.herokuapp.com/";
+export const backendAPI = "https://baddybuzz.herokuapp.com";
 
 //dev api
 // export const backendAPI = "http://localhost:5000";
