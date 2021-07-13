@@ -2,22 +2,22 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
-import { makeStyles } from "@material-ui/core/styles";
+import makeStyles from "@material-ui/core/styles/makeStyles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import InputBase from "@material-ui/core/InputBase";
 import Badge from "@material-ui/core/Badge";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
-import SearchIcon from "@material-ui/icons/Search";
 import Avatar from "@material-ui/core/Avatar";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import PostAddIcon from "@material-ui/icons/PostAdd";
 import HomeIcon from "@material-ui/icons/Home";
+import Popover from "@material-ui/core/Popover";
 
 import { logoutBttnClicked, useUserSelector, newPostBttnClicked } from "../../../features";
+import { SearchBar } from "../SearchBar";
 
 const useStyles = makeStyles((theme) => ({
    grow: {
@@ -40,25 +40,28 @@ const useStyles = makeStyles((theme) => ({
       marginLeft: "1rem",
       alignSelf: "center",
       width: "auto",
-   },
-   searchIcon: {
-      padding: theme.spacing(0, 2),
-      height: "100%",
-      position: "absolute",
-      pointerEvents: "none",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
+      columnGap: 0,
+   },
+   searchIcon: {
+      padding: theme.spacing(0, 2),
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "flex-end",
    },
    inputRoot: {
       color: "inherit",
+      border: "none",
    },
    inputInput: {
       padding: theme.spacing(1, 1, 1, 0),
       // vertical padding + font size from searchIcon
-      paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+      paddinRight: `calc(1em + ${theme.spacing(4)}px)`,
       transition: theme.transitions.create("width"),
       width: "20ch",
+      zIndex: 4654,
    },
    smallAvatar: {
       fontSize: "1rem",
@@ -76,6 +79,11 @@ const useStyles = makeStyles((theme) => ({
       [theme.breakpoints.up("md")]: {
          display: "none",
       },
+   },
+   searchList: {
+      position: "fixed",
+      width: "15rem",
+      top: "4rem",
    },
 }));
 
@@ -121,28 +129,13 @@ export function NavBarTop() {
                <Typography variant="h6" className={classes.sectionMobile}>
                   BB
                </Typography>
-               <div className={classes.search}>
-                  <div className={classes.searchIcon}>
-                     <SearchIcon />
-                  </div>
-                  <InputBase
-                     placeholder="Search…"
-                     classes={{
-                        root: classes.inputRoot,
-                        input: classes.inputInput,
-                     }}
-                     inputProps={{ "aria-label": "search" }}
-                  />
-               </div>
+               <SearchBar />
                <div className={classes.sectionDesktop}>
-                  <IconButton
-                     aria-label="show 4 new mails"
-                     color="inherit"
-                     onClick={() => navigate("/")}>
+                  <IconButton aria-label="go to home" color="inherit" onClick={() => navigate("/")}>
                      <HomeIcon />
                   </IconButton>
                   <IconButton
-                     aria-label="show 4 new mails"
+                     aria-label="new post"
                      color="inherit"
                      onClick={() => dispatch(newPostBttnClicked())}>
                      <PostAddIcon />

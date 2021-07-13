@@ -1,8 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-import { AuthFormActionType } from "./authForm/AuthFormActionType";
-
 import TextField from "@material-ui/core/TextField";
 
 import Avatar from "@material-ui/core/Avatar";
@@ -17,10 +15,7 @@ import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 import { useProfileForm } from "./updateProfileForm/useProfileForm";
-import {
-   profileUpdateBttnClicked,
-   useUserSelector,
-} from "../../features/authentication/authenticationSlice";
+import { profileUpdateBttnClicked } from "../../features/authentication/authenticationSlice";
 import { useDispatch } from "react-redux";
 import { UploadProfilePic } from "./UploadProfilePic";
 import { ProfileFormActionType } from "./updateProfileForm/ProfileFormActionType";
@@ -46,7 +41,6 @@ export const UpdateProfile = () => {
    const dispatch = useDispatch();
 
    const { profileFormState, profileFormDispatch } = useProfileForm();
-   console.log(profileFormState);
    const updateBttnHandler = () => {
       const updateProfile = {
          bio: profileFormState.bio,

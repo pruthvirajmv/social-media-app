@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDropzone } from "react-dropzone";
 
 import Dialog from "@material-ui/core/Dialog";
@@ -11,7 +11,6 @@ import Box from "@material-ui/core/Box";
 import { makeStyles } from "@material-ui/core/styles";
 
 import { checkAxiosError, CLOUDINARY_BASE_URL, CLOUDINARY_PRESET } from "../../utils";
-import { useProfileForm } from "./updateProfileForm/useProfileForm";
 import { ProfileFormActionType } from "./updateProfileForm/ProfileFormActionType";
 
 const useStyles = makeStyles((theme) => ({

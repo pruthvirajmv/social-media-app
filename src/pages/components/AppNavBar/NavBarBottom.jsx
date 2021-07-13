@@ -8,6 +8,7 @@ import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
 import PostAddIcon from "@material-ui/icons/PostAdd";
 import HomeIcon from "@material-ui/icons/Home";
 import Avatar from "@material-ui/core/Avatar";
+import PersonAddIcon from "@material-ui/icons/PersonAdd";
 
 import { useUserSelector, newPostBttnClicked } from "../../../features";
 
@@ -54,8 +55,12 @@ export function NavBarBottom() {
             icon={<PostAddIcon onClick={() => dispatch(newPostBttnClicked())} />}
          />
          <BottomNavigationAction
+            icon={<PersonAddIcon onClick={() => navigate("/followsuggestion")} />}
+         />
+         <BottomNavigationAction
             icon={
                <Avatar
+                  alt={user.profilePicName}
                   src={user.profilePic}
                   className={classes.avatar}
                   onClick={() => navigate("/profile")}
