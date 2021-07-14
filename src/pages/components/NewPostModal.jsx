@@ -120,7 +120,9 @@ export function NewPostModal() {
             <DialogContent dividers>
                <Grid container wrap="nowrap" spacing={2}>
                   <Grid item>
-                     <Avatar alt={user.profilePicName} src={user.profilePic}></Avatar>
+                     <Avatar alt={user.profilePicName} src={user.profilePic}>
+                        {user.profilePicName}
+                     </Avatar>
                   </Grid>
                   <Grid item xs container direction="column" spacing={2}>
                      <Grid item>

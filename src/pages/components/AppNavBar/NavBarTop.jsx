@@ -14,10 +14,9 @@ import Avatar from "@material-ui/core/Avatar";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import PostAddIcon from "@material-ui/icons/PostAdd";
 import HomeIcon from "@material-ui/icons/Home";
-import Popover from "@material-ui/core/Popover";
-
 import { logoutBttnClicked, useUserSelector, newPostBttnClicked } from "../../../features";
 import { SearchBar } from "../SearchBar";
+import { NotificationsPopover } from "./components/NotificationsPopover";
 
 const useStyles = makeStyles((theme) => ({
    grow: {
@@ -89,22 +88,33 @@ const useStyles = makeStyles((theme) => ({
 
 export function NavBarTop() {
    const classes = useStyles();
-   const [anchorEl, setAnchorEl] = useState(null);
    const navigate = useNavigate();
    const dispatch = useDispatch();
    const { user } = useUserSelector();
+   const userNotifications = user.notifications ? user.notifications : [];
 
+   // -----------profile menu---------------//
+   const [anchorEl, setAnchorEl] = useState(null);
    const isMenuOpen = Boolean(anchorEl);
-
    const handleProfileMenuOpen = (event) => {
       setAnchorEl(event.currentTarget);
    };
-
    const handleMenuClose = () => {
       setAnchorEl(null);
    };
-
    const menuId = "primary-search-account-menu";
+
+   // -----------notifications popover---------------//
+   const [notificationsPopover, setNotificationsPopover] = React.useState(null);
+   const handleClick = (event) => {
+      setNotificationsPopover(event.currentTarget);
+   };
+   const handleClose = () => {
+      setNotificationsPopover(null);
+   };
+   const open = Boolean(notificationsPopover);
+   const notificationsId = open ? "notification-popover" : undefined;
+
    const renderMenu = (
       <Menu
          anchorEl={anchorEl}
@@ -123,7 +133,10 @@ export function NavBarTop() {
       <div className={classes.grow}>
          <AppBar position="fixed">
             <Toolbar className={classes.toolBar}>
-               <Typography variant="h6" className={classes.sectionDesktop}>
+               <Typography
+                  variant="h6"
+                  className={classes.sectionDesktop}
+                  onClick={() => navigate("/")}>
                   Baddy-Buzz
                </Typography>
                <Typography variant="h6" className={classes.sectionMobile}>
@@ -140,8 +153,12 @@ export function NavBarTop() {
                      onClick={() => dispatch(newPostBttnClicked())}>
                      <PostAddIcon />
                   </IconButton>
-                  <IconButton aria-label="show 17 new notifications" color="inherit">
-                     <Badge badgeContent={1} color="secondary">
+                  <IconButton
+                     aria-label="show 17 new notifications"
+                     color="inherit"
+                     onClick={handleClick}
+                     id={notificationsId}>
+                     <Badge badgeContent={userNotifications.length} color="secondary">
                         <NotificationsIcon />
                      </Badge>
                   </IconButton>
@@ -161,8 +178,13 @@ export function NavBarTop() {
                   </IconButton>
                </div>
                <div className={classes.sectionMobile}>
-                  <IconButton aria-label="show more" aria-haspopup="true" color="inherit">
-                     <Badge badgeContent={1} color="secondary">
+                  <IconButton
+                     aria-label="notifications"
+                     aria-haspopup="true"
+                     color="inherit"
+                     onClick={handleClick}
+                     id={notificationsId}>
+                     <Badge badgeContent={userNotifications.length} color="secondary">
                         <NotificationsIcon />
                      </Badge>
                   </IconButton>
@@ -170,6 +192,13 @@ export function NavBarTop() {
             </Toolbar>
          </AppBar>
          {renderMenu}
+
+         <NotificationsPopover
+            id={notificationsId}
+            open={open}
+            anchorEl={notificationsPopover}
+            onClose={handleClose}
+         />
       </div>
    );
 }

@@ -7,6 +7,8 @@ export {
    profileUpdateBttnClicked,
    bookmarkBttnClicked,
    followBttnClicked,
+   clearNotificationBttnClicked,
+   clearAllNotificationsBttnClicked,
 } from "./authentication/authenticationSlice";
 export {
    usePostSelector,

@@ -80,6 +80,30 @@ export const followBttnClicked = createAsyncThunk("user/followBttnClicked", asyn
    return data.following;
 });
 
+export const clearNotificationBttnClicked = createAsyncThunk(
+   "user/clearNotificationBttnClicked",
+   async (notificationId) => {
+      console.log(notificationId);
+      const { data } = await axios({
+         method: "POST",
+         url: `${backendAPI}/user/readnotification`,
+         data: { notificationId },
+      });
+      return data.notifications;
+   }
+);
+
+export const clearAllNotificationsBttnClicked = createAsyncThunk(
+   "user/clearAllNotificationsBttnClicked",
+   async () => {
+      const { data } = await axios({
+         method: "POST",
+         url: `${backendAPI}/user/clearnotifications`,
+      });
+      return data.notifications;
+   }
+);
+
 export const userSlice = createSlice({
    name: "user",
    initialState: {
@@ -160,6 +184,22 @@ export const userSlice = createSlice({
          state.user.following = action.payload;
       },
       [followBttnClicked.rejected]: (state, action) => {
+         console.log(action.error.message);
+      },
+
+      // -------- notification read & clear----------- //
+
+      [clearNotificationBttnClicked.fulfilled]: (state, action) => {
+         state.user.notifications = action.payload;
+      },
+      [clearNotificationBttnClicked.rejected]: (state, action) => {
+         console.log(action.error.message);
+      },
+
+      [clearAllNotificationsBttnClicked.fulfilled]: (state, action) => {
+         state.user.notifications = [];
+      },
+      [clearAllNotificationsBttnClicked.rejected]: (state, action) => {
          console.log(action.error.message);
       },
    },

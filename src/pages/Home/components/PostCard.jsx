@@ -71,7 +71,7 @@ export const PostCard = ({ post }) => {
       if (postedTimeAgo > 3600 && postedTimeAgo < 86400) {
          return `${Math.floor(postedTimeAgo / 3600)} hr ago`;
       }
-      const createdDate = new Date(Number(postedTime));
+      const createdDate = new Date(postedTime);
       return createdDate.toDateString();
    };
 
