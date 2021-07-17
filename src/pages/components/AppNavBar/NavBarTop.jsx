@@ -90,7 +90,7 @@ export function NavBarTop() {
    const classes = useStyles();
    const navigate = useNavigate();
    const dispatch = useDispatch();
-   const { user } = useUserSelector();
+   const { user, authStatus } = useUserSelector();
    const userNotifications = user.notifications ? user.notifications : [];
 
    const logoutHandler = () => {
@@ -156,11 +156,12 @@ export function NavBarTop() {
                   <IconButton
                      aria-label="new post"
                      color="inherit"
+                     disabled={authStatus !== "loggedIn" ? "true" : ""}
                      onClick={() => dispatch(newPostBttnClicked())}>
                      <PostAddIcon />
                   </IconButton>
                   <IconButton
-                     aria-label="show 17 new notifications"
+                     aria-label="show new notifications"
                      color="inherit"
                      onClick={handleClick}
                      id={notificationsId}>
