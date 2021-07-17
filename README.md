@@ -46,6 +46,8 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 
 # Baddy Buzz
 Social media web-app to connect with people   
+This repo contains app frontend code   
+To view backend code, vist the [repo](https://github.com/pruthvirajmv/social-media-app-backend/blob/development)
 
 #### Built using:  
 HTML5, CSS3, Javascript, ReactJs, Material UI, redux, redux tool kit
