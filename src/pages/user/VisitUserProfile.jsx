@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -13,10 +12,14 @@ import Paper from "@material-ui/core/Paper";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 
-import { followBttnClicked, useUserSelector, useUsersSelector } from "../../features";
+import {
+   followBttnClicked,
+   usePostSelector,
+   useUserSelector,
+   useUsersSelector,
+} from "../../features";
 import { ListUsersModal } from "../components/ListUsersModal";
 import { PostCard } from "../Home/components/PostCard";
-import { checkAxiosError, backendAPI } from "../../utils";
 
 const useStyles = makeStyles((theme) => ({
    root: {
@@ -34,6 +37,9 @@ const useStyles = makeStyles((theme) => ({
       fontSize: "3rem",
       width: theme.spacing(15),
       height: theme.spacing(15),
+   },
+   buzzDetails: {
+      padding: "0rem",
    },
    tabsContainer: {
       width: "100%",
@@ -55,30 +61,18 @@ export const VisitUserProfile = () => {
    const { username } = useParams();
    const { authStatus, user } = useUserSelector();
    const { users } = useUsersSelector();
+   const { posts } = usePostSelector();
 
    const [selectedUser, setSelectedUser] = useState(null);
-   const [selectedUserPosts, setSelectedUserPosts] = useState(null);
+   const [selectedUserPosts, setSelectedUserPosts] = useState([]);
 
-   const getSelectedUserProfile = async () => {
+   useEffect(() => {
       let getUserProfile = users.find((user) => user.userName === username);
       setSelectedUser({ ...getUserProfile });
-   };
 
-   const getSelectedUserPosts = async () => {
-      try {
-         const { data } = await axios({
-            method: "GET",
-            url: `${backendAPI}/post/${username}`,
-         });
-         setSelectedUserPosts([...data.userPosts]);
-      } catch (error) {
-         checkAxiosError(error);
-      }
-   };
-   useEffect(() => {
-      getSelectedUserProfile();
-      getSelectedUserPosts();
-   }, []);
+      let getUserPosts = posts.filter(({ author }) => author.userName === username);
+      setSelectedUserPosts(getUserPosts);
+   }, [users, username, posts]);
 
    const [value, setValue] = useState(0);
    const handleChange = (event, newValue) => {
@@ -130,9 +124,12 @@ export const VisitUserProfile = () => {
                               container
                               direction="row"
                               justify="space-around"
-                              alignItems="center">
+                              alignItems="center"
+                              className={classes.buzzDetails}>
                               <Grid item>
-                                 <Typography gutterBottom>posts</Typography>
+                                 <Typography gutterBottom>
+                                    {selectedUserPosts.length} posts
+                                 </Typography>
                               </Grid>
                               <Grid item>
                                  <Button onClick={() => setShowList("followers")}>
@@ -170,7 +167,7 @@ export const VisitUserProfile = () => {
                   </Paper>
                </>
             )}
-            {selectedUserPosts !== null && (
+            {selectedUserPosts.length !== 0 && (
                <Grid
                   container
                   direction="column"

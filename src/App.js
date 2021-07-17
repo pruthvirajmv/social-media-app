@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import "./App.css";
 
-import { NavBarBottom, NavBarTop } from "./pages/components";
+import { Footer, NavBarBottom, NavBarTop } from "./pages/components";
 
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import {
@@ -82,6 +82,7 @@ export default function App() {
                <NewPostModal />
             </main>
             <NavBarBottom />
+            <Footer />
          </div>
       </ThemeProvider>
    );

@@ -100,7 +100,7 @@ export function SearchBar() {
                id={"search-popover"}
                onFocus={() => setSearchKey("")}
                onChange={handleSearchBar}
-               placeholder="Search…"
+               placeholder="Search user…"
                value={searchKey}
                classes={{
                   root: classes.inputRoot,

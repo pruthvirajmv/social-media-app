@@ -169,7 +169,7 @@ export const MyProfile = () => {
             </Box>
          )}
          <ListUsersModal
-            open={showList}
+            open={Boolean(showList)}
             likedUsers={showList === "followers" ? user.followers : user.following}
             onClose={() => setShowList("")}
             modalHead={showList}

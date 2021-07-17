@@ -1,7 +1,6 @@
 import { ProfileFormActionType } from "./ProfileFormActionType";
 
 export const profileFormReducer = (state, action) => {
-   console.log(action);
    switch (action.type) {
       case ProfileFormActionType.SET_BIO:
          return {

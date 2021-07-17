@@ -79,13 +79,13 @@ export function NotificationsPopover({ id, open, anchorEl, onClose }) {
             }}>
             <List dense>
                {userNotifications.length === 0 && (
-                  <ListItem>
+                  <ListItem key={0}>
                      <ListItemText primary="no new notifications" />
                   </ListItem>
                )}
                {userNotifications.length !== 0 && (
-                  <ListItem>
-                     <ListItem>notifications</ListItem>
+                  <ListItem key={1}>
+                     <ListItem key={1.1}>notifications</ListItem>
                      <ListItemSecondaryAction>
                         <IconButton onClick={() => dispatch(clearAllNotificationsBttnClicked())}>
                            <ClearAllIcon />

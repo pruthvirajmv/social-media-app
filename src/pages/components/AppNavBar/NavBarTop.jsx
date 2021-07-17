@@ -93,6 +93,12 @@ export function NavBarTop() {
    const { user } = useUserSelector();
    const userNotifications = user.notifications ? user.notifications : [];
 
+   const logoutHandler = () => {
+      dispatch(logoutBttnClicked());
+      navigate("/login");
+      localStorage.clear();
+   };
+
    // -----------profile menu---------------//
    const [anchorEl, setAnchorEl] = useState(null);
    const isMenuOpen = Boolean(anchorEl);
@@ -125,7 +131,7 @@ export function NavBarTop() {
          open={isMenuOpen}
          onClose={handleMenuClose}>
          <MenuItem onClick={() => navigate("/profile")}>Profile</MenuItem>
-         <MenuItem onClick={() => dispatch(logoutBttnClicked())}>Logout</MenuItem>
+         <MenuItem onClick={logoutHandler}>Logout</MenuItem>
       </Menu>
    );
 

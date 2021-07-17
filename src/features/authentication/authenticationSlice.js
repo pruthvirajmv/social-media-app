@@ -83,7 +83,6 @@ export const followBttnClicked = createAsyncThunk("user/followBttnClicked", asyn
 export const clearNotificationBttnClicked = createAsyncThunk(
    "user/clearNotificationBttnClicked",
    async (notificationId) => {
-      console.log(notificationId);
       const { data } = await axios({
          method: "POST",
          url: `${backendAPI}/user/readnotification`,
@@ -161,7 +160,6 @@ export const userSlice = createSlice({
 
       [profileUpdateBttnClicked.fulfilled]: (state, action) => {
          state.authStatus = "loggedIn";
-         console.log(action.payload);
          state.user = action.payload.user;
       },
       [profileUpdateBttnClicked.rejected]: (state, action) => {

@@ -18,6 +18,7 @@ const useStyles = makeStyles((theme) => ({
       display: "flex",
       position: "fixed",
       bottom: 0,
+      zIndex: 456,
       backgroundColor: theme.palette.primary.main,
       [theme.breakpoints.up("md")]: {
          display: "none",

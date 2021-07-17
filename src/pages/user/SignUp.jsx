@@ -21,6 +21,7 @@ import {
    useUserSelector,
 } from "../../features/authentication/authenticationSlice";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const useStyles = makeStyles((theme) => ({
    root: {
@@ -47,26 +48,41 @@ export function SignUp() {
    const dispatch = useDispatch();
    const { authError } = useUserSelector();
 
+   useEffect(() => {
+      authFormDispatch({
+         type: AuthFormActionType.SET_ERROR_MESSAGE,
+         payload: authError,
+      });
+   }, [authError, authFormDispatch]);
+
    const signupHandler = () => {
       if (
-         !(
-            authFormState.firstName ||
-            authFormState.lastName ||
-            authFormState.email ||
-            authFormState.password
-         )
+         authFormState.firstName === "" ||
+         authFormState.lastName === "" ||
+         authFormState.userName === "" ||
+         authFormState.email === "" ||
+         authFormState.password === ""
       ) {
          return authFormDispatch({
             type: AuthFormActionType.SET_ERROR_MESSAGE,
             payload: "Please enter all the fields",
          });
       }
+
+      if (!/^([^@]+)([@]{1})([a-z]+)\.com$/.test(authFormState.email)) {
+         return authFormDispatch({
+            type: AuthFormActionType.SET_ERROR_MESSAGE,
+            payload: "Please enter valid email",
+         });
+      }
+
       if (authFormState.password !== authFormState.confirmPassword) {
          return authFormDispatch({
             type: AuthFormActionType.SET_ERROR_MESSAGE,
             payload: "password did not match",
          });
       }
+
       const user = {
          firstName: authFormState.firstName,
          lastName: authFormState.lastName,
@@ -96,6 +112,12 @@ export function SignUp() {
                         labelwidth={0}
                         type="text"
                         required={true}
+                        onFocus={() =>
+                           authFormDispatch({
+                              type: AuthFormActionType.SET_ERROR_MESSAGE,
+                              payload: "",
+                           })
+                        }
                         onChange={(e) =>
                            authFormDispatch({
                               type: AuthFormActionType.SET_FIRST_NAME,
@@ -116,6 +138,12 @@ export function SignUp() {
                         labelwidth={0}
                         type="text"
                         required={true}
+                        onFocus={() =>
+                           authFormDispatch({
+                              type: AuthFormActionType.SET_ERROR_MESSAGE,
+                              payload: "",
+                           })
+                        }
                         onChange={(e) =>
                            authFormDispatch({
                               type: AuthFormActionType.SET_LAST_NAME,
@@ -136,6 +164,12 @@ export function SignUp() {
                         labelwidth={0}
                         type="text"
                         required={true}
+                        onFocus={() =>
+                           authFormDispatch({
+                              type: AuthFormActionType.SET_ERROR_MESSAGE,
+                              payload: "",
+                           })
+                        }
                         onChange={(e) =>
                            authFormDispatch({
                               type: AuthFormActionType.SET_USER_NAME,
@@ -156,6 +190,12 @@ export function SignUp() {
                         labelwidth={0}
                         type="text"
                         required={true}
+                        onFocus={() =>
+                           authFormDispatch({
+                              type: AuthFormActionType.SET_ERROR_MESSAGE,
+                              payload: "",
+                           })
+                        }
                         onChange={(e) =>
                            authFormDispatch({
                               type: AuthFormActionType.SET_EMAIL,
@@ -178,6 +218,12 @@ export function SignUp() {
                         type={authFormState.showPassword ? "text" : "password"}
                         required={true}
                         labelwidth={0}
+                        onFocus={() =>
+                           authFormDispatch({
+                              type: AuthFormActionType.SET_ERROR_MESSAGE,
+                              payload: "",
+                           })
+                        }
                         onChange={(e) =>
                            authFormDispatch({
                               type: AuthFormActionType.SET_PASSWORD,
@@ -215,6 +261,12 @@ export function SignUp() {
                         type={authFormState.showConfirmPassword ? "text" : "password"}
                         required={true}
                         labelwidth={0}
+                        onFocus={() =>
+                           authFormDispatch({
+                              type: AuthFormActionType.SET_ERROR_MESSAGE,
+                              payload: "",
+                           })
+                        }
                         onChange={(e) =>
                            authFormDispatch({
                               type: AuthFormActionType.SET_CONFIRM_PASSWORD,
@@ -258,7 +310,7 @@ export function SignUp() {
                   </Button>
                </div>
                <Typography variant="body1" color="error" align="center">
-                  {authFormState.errorMessage || authError}
+                  {authFormState.errorMessage}
                </Typography>
             </form>
          </Paper>
