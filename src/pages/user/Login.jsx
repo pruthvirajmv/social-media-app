@@ -65,11 +65,16 @@ export function Login() {
             payload: "Please enter the password",
          });
       } else {
-         if (!/^([a-zA-Z0-9@*#]{8,15})$/.test(authFormState.password)) {
+         if (!/^([^@]+)([@]{1})([a-z]+)\.com$/.test(authFormState.email)) {
+            return authFormDispatch({
+               type: AuthFormActionType.SET_ERROR_MESSAGE,
+               payload: "please enter valid email",
+            });
+         } else if (!/^([a-zA-Z0-9@*#]{8,15})$/.test(authFormState.password)) {
             return authFormDispatch({
                type: AuthFormActionType.SET_ERROR_MESSAGE,
                payload:
-                  "password length of 8-15 characters which must contain lowercase, uppercase, numeric and @ or #",
+                  "password length of 8-15 characters which must contain lowercase, uppercase, numeric and @ or # special characters",
             });
          }
          const user = { email: authFormState.email, password: authFormState.password };

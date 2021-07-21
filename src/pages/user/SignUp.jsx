@@ -86,7 +86,7 @@ export function SignUp() {
          return authFormDispatch({
             type: AuthFormActionType.SET_ERROR_MESSAGE,
             payload:
-               "password length of 8-15 characters which must contain lowercase, uppercase, numeric and @ or #",
+               "password length of 8-15 characters which must contain lowercase, uppercase, numeric and @ or # specails characters",
          });
       }
 
