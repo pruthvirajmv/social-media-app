@@ -114,7 +114,7 @@ export const VisitUserProfile = () => {
                                     {user.following.some(
                                        (following) => following.user._id === selectedUser._id
                                     )
-                                       ? "following"
+                                       ? "unfollow"
                                        : "follow"}
                                  </Button>
                               </Typography>

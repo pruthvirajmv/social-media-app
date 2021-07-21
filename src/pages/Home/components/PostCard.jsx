@@ -61,9 +61,7 @@ export const PostCard = ({ post }) => {
 
    const postCreatedOn = (postedTime) => {
       const currentTime = Date.now();
-      console.log(currentTime);
       const postedTimeAgo = (currentTime - postedTime) / 1000;
-      console.log(postedTimeAgo);
       if (postedTimeAgo < 60) {
          return `${Math.floor(postedTimeAgo)} sec ago`;
       }
@@ -116,7 +114,7 @@ export const PostCard = ({ post }) => {
                      onClick={() => dispatch(followBttnClicked(post.author._id))}
                      color="primary">
                      {user.following.some((following) => following.user._id === post.author._id)
-                        ? "following"
+                        ? "unfollow"
                         : "follow"}
                   </Button>
                )

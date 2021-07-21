@@ -42,7 +42,7 @@ export const ListUsersModal = ({ open, likedUsers, onClose, modalHead }) => {
                   <ListItemText primary={user.userName} secondary={user.fullName} />
                   <Button onClick={() => dispatch(followBttnClicked(user._id))} color="primary">
                      {followingList.some((following) => following.user._id === user._id)
-                        ? "following"
+                        ? "unfollow"
                         : "follow"}
                   </Button>
                </ListItem>
