@@ -111,8 +111,8 @@ export const VisitUserProfile = () => {
                                           ? dispatch(followBttnClicked(selectedUser._id))
                                           : navigate("/login");
                                     }}>
-                                    {selectedUser.following.some(
-                                       (following) => following.user._id === user._id
+                                    {user.following.some(
+                                       (following) => following.user._id === selectedUser._id
                                     )
                                        ? "following"
                                        : "follow"}

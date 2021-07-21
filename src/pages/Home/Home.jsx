@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
       display: "none",
       position: "fixed",
       width: "18rem",
-      height: `calc(100vh - 20rem)`,
+      height: `calc(100vh - 18rem)`,
       overflowY: "hidden",
       backgroundColor: theme.palette.background.paper,
       "& a": {
