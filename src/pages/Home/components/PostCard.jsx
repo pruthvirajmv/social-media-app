@@ -63,7 +63,7 @@ export const PostCard = ({ post }) => {
       const currentTime = Date.now();
       const postedTimeAgo = (currentTime - postedTime) / 1000;
       if (postedTimeAgo < 0) {
-         return `just noq`;
+         return "just now";
       }
       if (postedTimeAgo < 60) {
          return `${Math.floor(postedTimeAgo)} sec ago`;
