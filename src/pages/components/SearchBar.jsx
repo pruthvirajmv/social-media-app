@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import InputBase from "@material-ui/core/InputBase";
@@ -75,7 +75,9 @@ const useStyles = makeStyles((theme) => ({
 export function SearchBar() {
    const classes = useStyles();
 
-   const { user } = useUserSelector();
+   const navigate = useNavigate();
+
+   const { authStatus, user } = useUserSelector();
    const { users } = useUsersSelector();
 
    const [searchKey, setSearchKey] = useState("");
@@ -100,7 +102,9 @@ export function SearchBar() {
                id={"search-popover"}
                onFocus={() => setSearchKey("")}
                onChange={handleSearchBar}
+               onClick={() => authStatus === "loggedOut" && navigate("/login")}
                placeholder="Search user…"
+               disabled={authStatus === "loggedOut" && "true"}
                value={searchKey}
                classes={{
                   root: classes.inputRoot,
@@ -112,6 +116,7 @@ export function SearchBar() {
                {searchKey !== "" ? (
                   <CloseIcon
                      onClick={() => {
+                        if (authStatus === "loggedOut") return navigate("/login");
                         setSearchKey("");
                         setSearchResult([]);
                      }}

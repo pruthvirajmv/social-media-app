@@ -61,7 +61,9 @@ export const PostCard = ({ post }) => {
 
    const postCreatedOn = (postedTime) => {
       const currentTime = Date.now();
+      console.log(currentTime);
       const postedTimeAgo = (currentTime - postedTime) / 1000;
+      console.log(postedTimeAgo);
       if (postedTimeAgo < 60) {
          return `${Math.floor(postedTimeAgo)} sec ago`;
       }
@@ -172,9 +174,10 @@ export const PostCard = ({ post }) => {
                onClick={() => dispatch(likeButtonClicked(post._id))}>
                <FavoriteIcon />
             </IconButton>
-            <IconButton aria-label="share">
+            {/* upcoming version feature */}
+            {/* <IconButton aria-label="share">
                <ShareIcon />
-            </IconButton>
+            </IconButton> */}
             <IconButton
                variant="contained"
                color={

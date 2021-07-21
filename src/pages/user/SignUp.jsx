@@ -55,7 +55,13 @@ export function SignUp() {
       });
    }, [authError, authFormDispatch]);
 
-   const signupHandler = () => {
+   const signupHandler = (e) => {
+      e.preventDefault();
+
+      authFormDispatch({
+         type: AuthFormActionType.SET_LOADING,
+      });
+
       if (
          authFormState.firstName === "" ||
          authFormState.lastName === "" ||
@@ -73,6 +79,14 @@ export function SignUp() {
          return authFormDispatch({
             type: AuthFormActionType.SET_ERROR_MESSAGE,
             payload: "Please enter valid email",
+         });
+      }
+
+      if (!/^([a-zA-Z0-9@*#]{8,15})$/.test(authFormState.password)) {
+         return authFormDispatch({
+            type: AuthFormActionType.SET_ERROR_MESSAGE,
+            payload:
+               "password length of 8-15 characters which must contain lowercase, uppercase, numeric and @ or #",
          });
       }
 
@@ -297,6 +311,7 @@ export function SignUp() {
                </div>
                <div>
                   <Button
+                     type="submit"
                      fullWidth={true}
                      color="primary"
                      variant="contained"

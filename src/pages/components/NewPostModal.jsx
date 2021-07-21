@@ -31,6 +31,11 @@ import {
 import { checkAxiosError, CLOUDINARY_BASE_URL, CLOUDINARY_PRESET } from "../../utils";
 
 const useStyles = makeStyles((theme) => ({
+   root: {
+      width: "100%",
+      maxWidth: "25rem",
+      margin: "auto",
+   },
    dialogTitle: {
       display: "flex",
       justifyContent: "space-between",
@@ -51,6 +56,9 @@ const useStyles = makeStyles((theme) => ({
       padding: "0.4rem",
       backgroundColor: "#fafafa",
       height: "5rem",
+   },
+   postMedia: {
+      width: "100%",
    },
 }));
 
@@ -100,6 +108,7 @@ export function NewPostModal() {
    return (
       <>
          <Dialog
+            className={classes.root}
             aria-labelledby="customized-dialog-title"
             open={newPostModal}
             onClose={() => dispatch(newPostCancelBttnClicked())}>
@@ -146,6 +155,15 @@ export function NewPostModal() {
                            onChange={(e) => dispatch(setNewPostContent(e.target.value))}
                         />
                      </Grid>
+                     <Grid item>
+                        {newPost.media && (
+                           <img
+                              className={classes.postMedia}
+                              src={newPost.media}
+                              alt="post media"
+                           />
+                        )}
+                     </Grid>
                   </Grid>
                </Grid>
             </DialogContent>
@@ -157,6 +175,7 @@ export function NewPostModal() {
                   onClick={postBttnHandler}
                   color="primary"
                   variant="contained"
+                  disabled={!(newPost.caption && newPost.content) && "true"}
                   disableElevation={true}
                   size="small">
                   Post

@@ -46,14 +46,14 @@ export function NotificationsPopover({ id, open, anchorEl, onClose }) {
          <ListItem key={notification._id}>
             {notification.notificationType === "LIKED" ? (
                <>
-                  <Link to={`/profile/${likedByUser.userName}`} className={classes.root}>
-                     {likedByUser.userName}
+                  <Link to={`/profile/${likedByUser?.userName}`} className={classes.root}>
+                     {likedByUser?.userName}
                   </Link>
                   &nbsp; {notification.notify}
                </>
             ) : (
                <>
-                  <Link to={`/profile/${likedByUser.userName}`}>{likedByUser.userName}</Link>
+                  <Link to={`/profile/${likedByUser?.userName}`}>{likedByUser?.userName}</Link>
                   &nbsp; {notification.notify}
                </>
             )}

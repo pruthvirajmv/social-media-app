@@ -39,13 +39,14 @@ export const authFormReducer = (state, action) => {
       case AuthFormActionType.SET_LOADING:
          return {
             ...state,
-            isLoading: !state.isLoading,
+            isLoading: true,
          };
 
       case AuthFormActionType.SET_ERROR_MESSAGE:
          return {
             ...state,
             errorMessage: action.payload,
+            isLoading: false,
          };
       case AuthFormActionType.TOGGLE_SHOW_PASSOWRD:
          return {

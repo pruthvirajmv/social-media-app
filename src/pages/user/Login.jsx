@@ -48,7 +48,9 @@ export function Login() {
    const dispatch = useDispatch();
    const { authError } = useUserSelector();
 
-   const loginButtonHandler = () => {
+   const loginButtonHandler = (e) => {
+      e.preventDefault();
+
       authFormDispatch({
          type: AuthFormActionType.SET_LOADING,
       });
@@ -63,12 +65,16 @@ export function Login() {
             payload: "Please enter the password",
          });
       } else {
+         if (!/^([a-zA-Z0-9@*#]{8,15})$/.test(authFormState.password)) {
+            return authFormDispatch({
+               type: AuthFormActionType.SET_ERROR_MESSAGE,
+               payload:
+                  "password length of 8-15 characters which must contain lowercase, uppercase, numeric and @ or #",
+            });
+         }
          const user = { email: authFormState.email, password: authFormState.password };
          dispatch(loginBttnClicked({ user, navigate, state }));
       }
-      authFormDispatch({
-         type: AuthFormActionType.SET_LOADING,
-      });
    };
 
    return (
@@ -111,6 +117,7 @@ export function Login() {
                         type={authFormState.showPassword ? "text" : "password"}
                         required={true}
                         labelwidth={0}
+                        minLength="8"
                         onChange={(e) =>
                            authFormDispatch({
                               type: AuthFormActionType.SET_PASSWORD,
@@ -140,6 +147,7 @@ export function Login() {
                      fullWidth={true}
                      color="primary"
                      variant="contained"
+                     type="submit"
                      onClick={loginButtonHandler}
                      disable={authFormState.isLoading ? true : false}
                      disableElevation={true}>
