@@ -51,9 +51,6 @@ export function Login() {
    const loginButtonHandler = (e) => {
       e.preventDefault();
 
-      authFormDispatch({
-         type: AuthFormActionType.SET_LOADING,
-      });
       if (!authFormState.email) {
          authFormDispatch({
             type: AuthFormActionType.SET_ERROR_MESSAGE,
@@ -142,7 +139,7 @@ export function Login() {
                      variant="contained"
                      type="submit"
                      onClick={loginButtonHandler}
-                     disable={authFormState.isLoading ? true : false}
+                     disabled={authFormState.isLoading ? true : false}
                      disableElevation={true}>
                      {authFormState.isLoading && <CircularProgress color="secondary" size="1rem" />}
                      {authFormState.isLoading ? " Loading..." : "Login"}

@@ -55,7 +55,7 @@ export function Footer() {
             <Grid item container className={classes.iconGrid}>
                <Grid item>
                   <Link
-                     href="https://neog.camp/"
+                     href="https://github.com/pruthvirajmv/social-media-app/tree/development"
                      target="_blank"
                      rel="noopener"
                      color="textPrimary">
