@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: theme.palette.background.paper,
       "& a": {
          textDecoration: "none",
+         color: "inherit",
       },
    },
 }));
@@ -53,14 +54,18 @@ export function UserSuggestions() {
                         </Avatar>
                      </Link>
                   </ListItemAvatar>
-                  <ListItemText
-                     primary={suggestedUser.userName}
-                     secondary={
-                        user.followers.some((follower) => follower.user._id === suggestedUser._id)
-                           ? "follows you"
-                           : suggestedUser.userName
-                     }
-                  />
+                  <Link to={`/profile/${suggestedUser.userName}`}>
+                     <ListItemText
+                        primary={suggestedUser.userName}
+                        secondary={
+                           user.followers.some(
+                              (follower) => follower.user._id === suggestedUser._id
+                           )
+                              ? "follows you"
+                              : suggestedUser.userName
+                        }
+                     />
+                  </Link>
                   <ListItemSecondaryAction>
                      <Button
                         variant="outlined"

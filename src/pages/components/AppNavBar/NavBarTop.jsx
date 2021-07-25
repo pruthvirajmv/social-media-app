@@ -22,6 +22,9 @@ const useStyles = makeStyles((theme) => ({
    grow: {
       flexGrow: 1,
    },
+   appName: {
+      cursor: "pointer",
+   },
    toolBar: {
       justifyContent: "space-around",
    },
@@ -143,10 +146,13 @@ export function NavBarTop() {
                   variant="h6"
                   className={classes.sectionDesktop}
                   onClick={() => navigate("/")}>
-                  Baddy-Buzz
+                  <span className={classes.appName}>Baddy-Buzz</span>
                </Typography>
-               <Typography variant="h6" className={classes.sectionMobile}>
-                  BB
+               <Typography
+                  variant="h6"
+                  className={classes.sectionMobile}
+                  onClick={() => navigate("/")}>
+                  <span>BB</span>
                </Typography>
                <SearchBar />
                <div className={classes.sectionDesktop}>

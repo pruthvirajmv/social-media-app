@@ -63,10 +63,6 @@ export function UploadProfilePic({ open, onClose, dispatch }) {
             type: ProfileFormActionType.SET_PROFILE_PIC,
             payload: res.secure_url,
          });
-         dispatch({
-            type: ProfileFormActionType.SET_WEBSITE,
-            payload: "dummy",
-         });
          onClose();
       } catch (error) {
          checkAxiosError(error);
