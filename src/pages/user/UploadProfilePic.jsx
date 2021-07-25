@@ -35,6 +35,12 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: "#fafafa",
       height: "5rem",
    },
+   dragAndDropInput: {
+      width: "12rem",
+      [theme.breakpoints.up("md")]: {
+         width: "20rem",
+      },
+   },
 }));
 
 export function UploadProfilePic({ open, onClose, dispatch }) {
@@ -81,9 +87,11 @@ export function UploadProfilePic({ open, onClose, dispatch }) {
                <Box {...getRootProps()} className={classes.dragAndDropArea}>
                   <InputBase {...getInputProps()} />
                   {isDragActive ? (
-                     <Typography>Drop the files here ...</Typography>
+                     <Typography className={classes.dragAndDropInput}>
+                        Drop the files here ...
+                     </Typography>
                   ) : (
-                     <Typography>
+                     <Typography className={classes.dragAndDropInput}>
                         Drag 'n' drop some files here, or click to select files
                      </Typography>
                   )}
