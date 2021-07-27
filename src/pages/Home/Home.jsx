@@ -14,12 +14,16 @@ import { Link } from "react-router-dom";
 import { UserSuggestions } from "../components";
 import { useUserSelector } from "../../features";
 import { Posts } from "./components/Posts";
+import { Typography } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
    root: {
       columnGap: "1rem",
       width: "100%",
       margin: "auto",
+      "& a": {
+         color: "inherit",
+      },
    },
    gridPost: {
       rowGap: "1rem",
@@ -75,7 +79,9 @@ export const Home = () => {
                         </Avatar>
                      </Link>
                   </ListItemAvatar>
-                  <ListItemText primary={user.fullName} />
+                  <Link to={`/profile`}>
+                     <Typography>{user.fullName}</Typography>
+                  </Link>
                </ListItem>
                <ListItem key="0528">
                   <ListItemText primary="suggestions for you" />

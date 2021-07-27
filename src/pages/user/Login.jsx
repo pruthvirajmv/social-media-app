@@ -49,7 +49,7 @@ export function Login() {
    const { authError } = useUserSelector();
 
    const loginButtonHandler = (e) => {
-      e.preventDefault();
+      e?.preventDefault();
 
       if (!authFormState.email) {
          authFormDispatch({
@@ -65,6 +65,21 @@ export function Login() {
          const user = { email: authFormState.email, password: authFormState.password };
          dispatch(loginBttnClicked({ user, navigate, state }));
       }
+   };
+
+   const guestLoginButtonHandler = () => {
+      const guestEmail = "guestuser@gmail.com";
+      const guestPassword = "guesT@21";
+      authFormDispatch({
+         type: AuthFormActionType.SET_EMAIL,
+         payload: guestEmail,
+      });
+      authFormDispatch({
+         type: AuthFormActionType.SET_PASSWORD,
+         payload: guestPassword,
+      });
+      const user = { email: guestEmail, password: guestPassword };
+      dispatch(loginBttnClicked({ user, navigate, state }));
    };
 
    return (
@@ -85,6 +100,7 @@ export function Login() {
                         labelwidth={0}
                         type="text"
                         required={true}
+                        value={authFormState.email}
                         onChange={(e) =>
                            authFormDispatch({
                               type: AuthFormActionType.SET_EMAIL,
@@ -107,7 +123,7 @@ export function Login() {
                         type={authFormState.showPassword ? "text" : "password"}
                         required={true}
                         labelwidth={0}
-                        minLength="8"
+                        value={authFormState.password}
                         onChange={(e) =>
                            authFormDispatch({
                               type: AuthFormActionType.SET_PASSWORD,
@@ -149,12 +165,14 @@ export function Login() {
                   {authError || authFormState.errorMessage}
                </Typography>
                <Typography variant="h6">
+                  Visit as guest user? &nbsp;
+                  <Button variant="outlined" size="small" onClick={guestLoginButtonHandler}>
+                     Guest
+                  </Button>
+               </Typography>
+               <Typography variant="h6">
                   Not a user yet? &nbsp;
-                  <Button
-                     variant="outlined"
-                     size="small"
-                     color="primary"
-                     onClick={() => navigate("/signup")}>
+                  <Button variant="outlined" size="small" onClick={() => navigate("/signup")}>
                      Signup
                   </Button>
                </Typography>

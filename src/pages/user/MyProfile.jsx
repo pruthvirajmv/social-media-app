@@ -13,6 +13,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
+import Link from "@material-ui/core/Link";
 
 import { logoutBttnClicked, useUserSelector, usePostSelector } from "../../features";
 import { PostCard } from "../Home/components/PostCard";
@@ -112,7 +113,7 @@ export const MyProfile = () => {
                            justify="space-around"
                            alignItems="center">
                            <Grid item>
-                              <Typography gutterBottom>posts</Typography>
+                              <Typography gutterBottom>{userPosts.length} posts</Typography>
                            </Grid>
                            <Grid item>
                               <Button onClick={() => setShowList("followers")}>
@@ -130,7 +131,13 @@ export const MyProfile = () => {
                               {user.bio}
                            </Typography>
                            <Typography variant="body2" color="textSecondary">
-                              {user.website}
+                              <Link
+                                 href={user.website}
+                                 target="_blank"
+                                 rel="noopener"
+                                 color="textSecondary">
+                                 {user.website}
+                              </Link>
                            </Typography>
                         </Grid>
                      </Grid>
@@ -170,7 +177,7 @@ export const MyProfile = () => {
          )}
          <ListUsersModal
             open={Boolean(showList)}
-            likedUsers={showList === "followers" ? user.followers : user.following}
+            usersList={showList === "followers" ? user.followers : user.following}
             onClose={() => setShowList("")}
             modalHead={showList}
          />

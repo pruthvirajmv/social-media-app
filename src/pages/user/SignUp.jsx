@@ -18,6 +18,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { useDispatch } from "react-redux";
 import {
    signUpBttnClicked,
+   loginBttnClicked,
    useUserSelector,
 } from "../../features/authentication/authenticationSlice";
 import { useNavigate } from "react-router-dom";

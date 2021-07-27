@@ -133,8 +133,20 @@ export function NavBarTop() {
          transformOrigin={{ vertical: "top", horizontal: "right" }}
          open={isMenuOpen}
          onClose={handleMenuClose}>
-         <MenuItem onClick={() => navigate("/profile")}>Profile</MenuItem>
-         <MenuItem onClick={logoutHandler}>Logout</MenuItem>
+         <MenuItem
+            onClick={() => {
+               navigate("/profile");
+               handleMenuClose();
+            }}>
+            Profile
+         </MenuItem>
+         <MenuItem
+            onClick={() => {
+               logoutHandler();
+               handleMenuClose();
+            }}>
+            Logout
+         </MenuItem>
       </Menu>
    );
 

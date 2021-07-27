@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
    },
 }));
 
-export const ListUsersModal = ({ open, likedUsers, onClose, modalHead }) => {
+export const ListUsersModal = ({ open, usersList, onClose, modalHead }) => {
    const classes = useStyles();
    const dispatch = useDispatch();
    const { user } = useUserSelector();
@@ -43,7 +43,8 @@ export const ListUsersModal = ({ open, likedUsers, onClose, modalHead }) => {
       <Dialog open={open} aria-labelledby="simple-dialog-title" onClose={onClose}>
          <DialogTitle id="simple-dialog-title">{modalHead}</DialogTitle>
          <List className={classes.root}>
-            {likedUsers?.map(({ user }, id) => (
+            {usersList?.length === 0 && <ListItem>No users here yet</ListItem>}
+            {usersList?.map(({ user }, id) => (
                <ListItem key={id}>
                   <ListItemAvatar button>
                      <Link to={`/profile/${user.userName}`}>

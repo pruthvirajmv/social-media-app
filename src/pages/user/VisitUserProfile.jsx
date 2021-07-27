@@ -11,6 +11,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
+import Link from "@material-ui/core/Link";
 
 import {
    followBttnClicked,
@@ -147,7 +148,13 @@ export const VisitUserProfile = () => {
                                  {selectedUser.bio}
                               </Typography>
                               <Typography variant="body2" color="textSecondary">
-                                 {selectedUser.website}
+                                 <Link
+                                    href={selectedUser.website}
+                                    target="_blank"
+                                    rel="noopener"
+                                    color="textSecondary">
+                                    {selectedUser.website}
+                                 </Link>
                               </Typography>
                            </Grid>
                         </Grid>
@@ -167,28 +174,24 @@ export const VisitUserProfile = () => {
                   </Paper>
                </>
             )}
-            {selectedUserPosts.length !== 0 && (
-               <Grid
-                  container
-                  direction="column"
-                  justify="center"
-                  alignItems="center"
-                  className={classes.posts}>
-                  {selectedTab.length === 0 && <div>No Posts</div>}
-                  {selectedTab.map((post) => (
-                     <Grid key={post._id} item>
-                        <PostCard post={post} />
-                     </Grid>
-                  ))}
-               </Grid>
-            )}
+            <Grid
+               container
+               direction="column"
+               justify="center"
+               alignItems="center"
+               className={classes.posts}>
+               {selectedTab.length === 0 && <div>No Posts</div>}
+               {selectedTab.map((post) => (
+                  <Grid key={post._id} item>
+                     <PostCard post={post} />
+                  </Grid>
+               ))}
+            </Grid>
          </Box>
 
          <ListUsersModal
             open={showList}
-            likedUsers={
-               showList === "followers" ? selectedUser?.followers : selectedUser?.following
-            }
+            usersList={showList === "followers" ? selectedUser?.followers : selectedUser?.following}
             onClose={() => setShowList("")}
             modalHead={showList}
          />

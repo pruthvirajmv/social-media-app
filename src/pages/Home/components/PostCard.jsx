@@ -39,11 +39,20 @@ const useStyles = makeStyles((theme) => ({
          color: "initial",
       },
    },
+   postMedia: {
+      objectFit: "scale-down",
+      width: "100%",
+      height: "auto",
+      maxHeight: "20rem",
+   },
    bookmarkIcon: {
       marginLeft: "auto",
    },
    cardFooter: {
       padding: "0 1rem 0",
+      "& a": {
+         textDecoration: "underline",
+      },
    },
    avatar: {
       cursor: "pointer",
@@ -125,7 +134,13 @@ export const PostCard = ({ post }) => {
          />
          <Divider />
          {post?.media && (
-            <CardMedia component="img" image={post.media} title="Post" height="auto" />
+            <CardMedia
+               component="img"
+               image={post.media}
+               title="Post"
+               height="auto"
+               className={classes.postMedia}
+            />
          )}
          <CardContent>
             <Typography variant="body2" color="textPrimary" component="p">
@@ -159,7 +174,15 @@ export const PostCard = ({ post }) => {
                   color="textPrimary"
                   component="p"
                   className={classes.cardFooter}>
-                  {post.author.userName} {post.caption}
+                  <Link
+                     onClick={() =>
+                        post.author._id === user._id
+                           ? navigate("/profile")
+                           : navigate(`/profile/${post.author.userName}`)
+                     }>
+                     {post.author.userName}
+                  </Link>
+                  &nbsp;{post.caption}
                </Typography>
             </Grid>
          </Grid>
@@ -194,7 +217,7 @@ export const PostCard = ({ post }) => {
 
          <ListUsersModal
             open={likedByModal}
-            likedUsers={post.likedBy}
+            usersList={post.likedBy}
             onClose={() => setLikedByModal((prev) => !prev)}
             modalHead={"liked by"}
          />

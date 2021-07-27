@@ -41,7 +41,9 @@ export const signUpBttnClicked = createAsyncThunk(
             url: `${backendAPI}/user/signup`,
             data: { addUser: user },
          });
-         navigate("/login");
+         setupAuthHeader(data.user.token);
+         localStorage?.setItem("loginSession", JSON.stringify({ token: data.user.token }));
+         navigate("/");
          return data;
       } catch (error) {
          return rejectWithValue(error.response.data);
@@ -149,6 +151,7 @@ export const userSlice = createSlice({
       },
       [signUpBttnClicked.fulfilled]: (state, action) => {
          state.authStatus = "loggedIn";
+         state.user = action.payload.user;
          state.authError = "";
       },
       [signUpBttnClicked.rejected]: (state, action) => {
