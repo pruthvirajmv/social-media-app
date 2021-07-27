@@ -181,7 +181,7 @@ export function NewPostModal() {
                   onClick={postBttnHandler}
                   color="primary"
                   variant="contained"
-                  disabled={!(newPost.caption && newPost.content) && "true"}
+                  disabled={!(newPost.caption && (newPost.content || newPost.media)) && "true"}
                   disableElevation={true}
                   size="small">
                   Post
