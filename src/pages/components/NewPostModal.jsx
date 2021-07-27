@@ -56,6 +56,7 @@ const useStyles = makeStyles((theme) => ({
       padding: "0.4rem",
       backgroundColor: "#fafafa",
       height: "5rem",
+      zIndex: "999",
    },
    dragAndDropInput: {
       width: "12rem",
@@ -195,8 +196,8 @@ export function NewPostModal() {
             onClose={() => setPostMedia(false)}>
             <DialogTitle id="customized-dialog-title">Upload file</DialogTitle>
             <DialogContent>
-               <Box {...getRootProps()} className={classes.dragAndDropArea}>
-                  <InputBase {...getInputProps()} />
+               <div {...getRootProps()} className={classes.dragAndDropArea}>
+                  <input {...getInputProps()} />
                   {isDragActive ? (
                      <Typography className={classes.dragAndDropInput}>
                         Drop the files here ...
@@ -206,7 +207,7 @@ export function NewPostModal() {
                         Drag 'n' drop some files here, or click to select files
                      </Typography>
                   )}
-               </Box>
+               </div>
             </DialogContent>
          </Dialog>
       </>
