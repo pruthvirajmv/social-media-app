@@ -50,7 +50,9 @@ export function Login() {
 
    const loginButtonHandler = (e) => {
       e?.preventDefault();
-
+      authFormDispatch({
+         type: AuthFormActionType.SET_LOADING,
+      });
       if (!authFormState.email) {
          authFormDispatch({
             type: AuthFormActionType.SET_ERROR_MESSAGE,
@@ -63,13 +65,16 @@ export function Login() {
          });
       } else {
          const user = { email: authFormState.email, password: authFormState.password };
-         dispatch(loginBttnClicked({ user, navigate, state }));
+         dispatch(loginBttnClicked({ user, navigate, state, authFormDispatch }));
       }
    };
 
    const guestLoginButtonHandler = () => {
       const guestEmail = "guestuser@gmail.com";
       const guestPassword = "guesT@21";
+      authFormDispatch({
+         type: AuthFormActionType.SET_LOADING,
+      });
       authFormDispatch({
          type: AuthFormActionType.SET_EMAIL,
          payload: guestEmail,

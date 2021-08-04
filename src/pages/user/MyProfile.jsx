@@ -21,22 +21,49 @@ import { ListUsersModal } from "../components/ListUsersModal";
 
 const useStyles = makeStyles((theme) => ({
    root: {
-      maxWidth: 600,
+      maxWidth: "100%",
       margin: "auto",
       display: "flex",
       gridColumnGap: "1.5rem",
       justifyContent: "center",
+      alignItems: "center",
       flexWrap: "wrap",
-      padding: "2rem",
+      padding: "1rem",
+      textAlign: "left",
+      [theme.breakpoints.up("sm")]: {
+         padding: "2rem",
+         maxWidth: 600,
+      },
+      "& .MuiIconButton-root": {
+         padding: "0",
+      },
+   },
+
+   avatarGrid: {
+      width: "100%",
+      margin: "auto",
+      [theme.breakpoints.up("sm")]: {
+         width: "initial",
+      },
    },
 
    largeAvatar: {
-      marginTop: "1rem",
+      margin: "auto",
       fontSize: "3rem",
       width: theme.spacing(15),
       height: theme.spacing(15),
    },
+
+   socialDetails: {
+      margin: "1rem auto",
+      fontSize: ".875rem",
+      [theme.breakpoints.up("md")]: {
+         fontSize: "",
+      },
+   },
+
    tabsContainer: {
+      marginTop: "1rem",
       width: "100%",
       "& .MuiTabs-flexContainer": {
          justifyContent: "space-around",
@@ -84,8 +111,8 @@ export const MyProfile = () => {
          {authStatus !== "loggedIn" && <p>Loading...</p>}
          {authStatus === "loggedIn" && (
             <Box className={classes.root}>
-               <Grid container spacing={8}>
-                  <Grid item>
+               <Grid container spacing={6}>
+                  <Grid item className={classes.avatarGrid}>
                      <Avatar
                         alt={user.profilePicName}
                         src={user.profilePic}
@@ -96,7 +123,7 @@ export const MyProfile = () => {
                   <Grid item xs={12} sm container>
                      <Grid item xs container direction="column" spacing={2}>
                         <Grid item xs>
-                           <Typography gutterBottom variant="h5">
+                           <Typography variant="h5">
                               {user.userName}
                               <Button
                                  color="primary"
@@ -106,41 +133,26 @@ export const MyProfile = () => {
                               </Button>
                            </Typography>
                         </Grid>
-                        <Grid
-                           item
-                           container
-                           direction="row"
-                           justify="space-around"
-                           alignItems="center">
+                        <Grid item container direction="column" justify="flex-start">
                            <Grid item>
-                              <Typography gutterBottom>{userPosts.length} posts</Typography>
+                              <Typography variant="body1" gutterBottom>
+                                 {user.bio}
+                              </Typography>
                            </Grid>
                            <Grid item>
-                              <Button onClick={() => setShowList("followers")}>
-                                 {user.followers.length} followers
-                              </Button>
+                              <Typography variant="body2" color="textSecondary">
+                                 <Link
+                                    href={user.website}
+                                    target="_blank"
+                                    rel="noopener"
+                                    color="textSecondary">
+                                    {user.website}
+                                 </Link>
+                              </Typography>
                            </Grid>
-                           <Grid item>
-                              <Button onClick={() => setShowList("following")}>
-                                 {user.following.length} following
-                              </Button>
-                           </Grid>
-                        </Grid>
-                        <Grid item>
-                           <Typography variant="body1" gutterBottom>
-                              {user.bio}
-                           </Typography>
-                           <Typography variant="body2" color="textSecondary">
-                              <Link
-                                 href={user.website}
-                                 target="_blank"
-                                 rel="noopener"
-                                 color="textSecondary">
-                                 {user.website}
-                              </Link>
-                           </Typography>
                         </Grid>
                      </Grid>
+
                      <Grid item>
                         <IconButton size="medium" onClick={logoutHandler}>
                            <ExitToAppIcon />
@@ -148,6 +160,28 @@ export const MyProfile = () => {
                      </Grid>
                   </Grid>
                </Grid>
+               <Grid
+                  item
+                  container
+                  className={classes.socialDetails}
+                  direction="row"
+                  justify="space-around"
+                  alignItems="center">
+                  <Grid item>
+                     <Typography variant="text">{userPosts.length} POSTS</Typography>
+                  </Grid>
+                  <Grid item>
+                     <Button onClick={() => setShowList("followers")}>
+                        {user.followers.length} followers
+                     </Button>
+                  </Grid>
+                  <Grid item>
+                     <Button onClick={() => setShowList("following")}>
+                        {user.following.length} following
+                     </Button>
+                  </Grid>
+               </Grid>
+
                <Paper square className={classes.tabsContainer}>
                   <Tabs
                      value={value}
@@ -160,19 +194,13 @@ export const MyProfile = () => {
                      <Tab label="Bookmarked" />
                   </Tabs>
                </Paper>
-               <Grid
-                  container
-                  direction="column"
-                  justify="center"
-                  alignItems="center"
-                  className={classes.posts}>
-                  {selectedTab.length === 0 && <div>No Posts</div>}
-                  {selectedTab.map((post) => (
-                     <Grid key={post._id} item>
-                        <PostCard post={post} />
-                     </Grid>
-                  ))}
-               </Grid>
+
+               {selectedTab.length === 0 && <div>No Posts</div>}
+               {selectedTab.map((post) => (
+                  <Grid key={post._id} container className={classes.posts} justify="center">
+                     <PostCard post={post} />
+                  </Grid>
+               ))}
             </Box>
          )}
          <ListUsersModal

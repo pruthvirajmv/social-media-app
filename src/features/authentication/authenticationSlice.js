@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { backendAPI, setupAuthHeader } from "../../utils";
+import { AuthFormActionType } from "../../pages/user/authForm/AuthFormActionType";
 
 export const loadUser = createAsyncThunk("user/loadUser", async () => {
    const { data } = await axios({
@@ -13,7 +14,7 @@ export const loadUser = createAsyncThunk("user/loadUser", async () => {
 
 export const loginBttnClicked = createAsyncThunk(
    "user/loginBttnClicked",
-   async ({ user, navigate, state }, { rejectWithValue }) => {
+   async ({ user, navigate, state, authFormDispatch }, { rejectWithValue }) => {
       try {
          const { data } = await axios({
             method: "POST",
@@ -26,7 +27,9 @@ export const loginBttnClicked = createAsyncThunk(
          return data;
       } catch (error) {
          console.log(error);
-
+         authFormDispatch({
+            type: AuthFormActionType.SET_LOADING,
+         });
          return rejectWithValue(error.response.data);
       }
    }

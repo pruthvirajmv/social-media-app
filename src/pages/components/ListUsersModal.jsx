@@ -47,14 +47,19 @@ export const ListUsersModal = ({ open, usersList, onClose, modalHead }) => {
             {usersList?.map(({ user }, id) => (
                <ListItem key={id}>
                   <ListItemAvatar button>
-                     <Link to={`/profile/${user.userName}`}>
+                     <Link
+                        to={loggedInUserId === user._id ? `/profile` : `/profile/${user.userName}`}>
                         <Avatar alt={user.profilePicName} src={user.profilePic}></Avatar>
                      </Link>
                   </ListItemAvatar>
                   <ListItemText
                      primary={user.userName}
                      secondary={user.fullName}
-                     onClick={() => navigate(`/profile/${user.userName}`)}
+                     onClick={() =>
+                        navigate(
+                           loggedInUserId === user._id ? `/profile` : `/profile/${user.userName}`
+                        )
+                     }
                   />
                   {loggedInUserId !== user._id && (
                      <Button
