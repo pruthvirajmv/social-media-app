@@ -84,7 +84,7 @@ export function SearchBar() {
    const [searchResult, setSearchResult] = useState([]);
 
    const handleSearchBar = (event) => {
-      const searchInput = event.target.value;
+      const searchInput = event.target.value.toLowerCase();
       setSearchKey(searchInput);
       setSearchResult(() =>
          users.filter(
@@ -133,7 +133,12 @@ export function SearchBar() {
                   return (
                      <ListItem key={suggestedUser._id}>
                         <ListItemAvatar>
-                           <Link to={`/profile/${suggestedUser.userName}`}>
+                           <Link
+                              to={
+                                 suggestedUser._id === user._id
+                                    ? "/profile"
+                                    : `/profile/${suggestedUser.userName}`
+                              }>
                               <Avatar
                                  onClick={() => setSearchKey("")}
                                  alt={suggestedUser.profilePicName}
