@@ -1,4 +1,4 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
+This project is [materialed](https://material-ui.com/) with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
 
 ## Available Scripts
 
@@ -42,3 +42,37 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+
+# Baddy Buzz
+Social media web-app to connect with people   
+This repo contains app frontend code   
+To view backend code, vist the [repo](https://github.com/pruthvirajmv/social-media-app-backend/blob/development)
+
+#### Built using:  
+HTML5, CSS3, Javascript, ReactJs, Material UI, redux, redux tool kit
+
+## Features  
+* User Auth - SignUp, login
+* User Mangement
+  * View profile 
+  * Update profile (profile pic, bio, website)
+  * Notifications for likes, follow
+* Feed (Home Page)
+* Post Interactions
+   * Upload Post only text or with media
+   * Like 
+   * Bookmark 
+   * Delete
+* Networking Interactions
+  * Search users
+  * View users
+  * Follow/Unfollow user
+  
+## Upcoming feature
+* Share posts with people
+* Comment section for posts
+* Chat with users
+
+
+
